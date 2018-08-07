@@ -29,4 +29,4 @@ implementation, progressing through various levels of sophistication and then
 moving into a GUI solution, using tkinter.  The notes start
 `here <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.0.rst>`_.
 The code for this etude is
-`here <https://github.com/rzzzwilson/PythonEtudes/From_CLI_to_Gui>`_.
+`here <https://github.com/rzzzwilson/PythonEtudes/tree/master/From_CLI_to_GUI>`_.
