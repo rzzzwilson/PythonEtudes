@@ -15,7 +15,7 @@ converts a string to an integer.  We modify our code to be::
     the_sum = int1 + int2
     print(f'The sum of {int1} and {int2} is {the_sum}')
 
-Now when we run with the previous input values we see:
+Now when we run with the previous input values we see::
 
     $ python3 From_CLI_to_GUI.1.py
     Enter the first integer: 2
