@@ -21,6 +21,8 @@ The code for the etudes is stored
 `here <https://github.com/rzzzwilson/PythonEtudes/>`_ and the explanatory notes
 for each etude are in this wiki.
 
+All code is written for python 3.6 or later.
+
 From CLI to GUI
 ===============
 
