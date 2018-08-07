@@ -63,11 +63,13 @@ the top-level code::
 
 Before, all that *while* loop code distracted us from seeing what was actually
 happening at a logical level.  We now have a function **get_integer()** that,
-once we have figured out what it does, we can **forget about** it's
-implementation because that isn't important at the top-level.  We have actually
+once we have figured out what it does, we can **forget about** the details of
+how it works because that isn't important at the top-level.  We have actually
 simplified the logic of the program.
 
-This abstraction and hiding of complexity is one of your most powerful tools
+This abstraction and hiding of complexity is one of your most powerful tools.
+You should always be on the lookout for duplicated code and try to refactor the
+duplication.
 
 Testing
 -------
