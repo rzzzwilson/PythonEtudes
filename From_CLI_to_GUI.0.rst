@@ -40,7 +40,8 @@ However, when we run this program, we see::
 
 So we see there is a problem.  The sum of **2** and **3** should be **5**,
 but we get **23**!?  This is a very common beginner mistake, and is caused
-because the `input()` function always returns a string.  We have to convert
+because the `input() <https://docs.python.org/3/library/functions.html#input>`_`
+function always returns a string.  We have to convert
 the user input strings into integer values before attempting the integer 
 addition.
 
