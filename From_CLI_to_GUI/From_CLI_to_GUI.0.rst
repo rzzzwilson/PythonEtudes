@@ -50,5 +50,5 @@ strings and, as it happens, the `+` operator is overloaded for strings and
 results in string concatenation.
 
 On to the
-`next attempt <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.1>`_.
+`next attempt <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI/From_CLI_to_GUI.1>`_.
     

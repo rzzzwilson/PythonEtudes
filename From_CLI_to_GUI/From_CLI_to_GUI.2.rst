@@ -96,5 +96,5 @@ Now when we repeat the testing from the last page, we see::
     The sum of 2 and 3 is 5
 
 So far so good.  But now we can refactor a little on the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.3>`_.
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI/From_CLI_to_GUI.3>`_.
         

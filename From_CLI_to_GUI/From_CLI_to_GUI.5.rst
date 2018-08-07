@@ -59,4 +59,4 @@ As always, we test our code::
 The program works well for the standard test, but fails with exceptions when
 we don't provide integer strings.  We expected this because our code doesn't
 have any code to handle errors.  We'll do that on the 
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.5>`_.
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI/From_CLI_to_GUI.5>`_.

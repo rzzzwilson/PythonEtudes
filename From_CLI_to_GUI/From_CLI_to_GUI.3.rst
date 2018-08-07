@@ -92,6 +92,6 @@ command line, like this::
     The sum of 2 and 3 is 5
 
 Look on the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.4>`_
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI/From_CLI_to_GUI.4>`_
 for the solution.
         
