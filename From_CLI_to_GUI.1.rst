@@ -25,5 +25,5 @@ Now when we run with the previous input values we see::
 That looks better!  Are we finished?
 
 Find out on the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI/From_CLI_to_GUI.2>`_.
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.2>`_.
     
