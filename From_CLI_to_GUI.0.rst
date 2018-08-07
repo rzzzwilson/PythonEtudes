@@ -39,4 +39,15 @@ However, when we run this program, we see::
     The sum of 2 and 3 is 23
 
 So we see there is a problem.  The sum of **2** and **3** should be **5**,
-but we get **23**!?
+but we get **23**!?  This is a very common beginner mistake, and is caused
+because the `input()` function always returns a string.  We have to convert
+the user input strings into integer values before attempting the integer 
+addition.
+
+Why did we get the **23** result?  That happens because we tried to add two
+strings and, as it happens, the `+` operator is overloaded for strings and
+results in string concatenation.
+
+On to the
+`next attempt <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.1>`_.
+    
