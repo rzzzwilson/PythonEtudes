@@ -9,7 +9,8 @@ like this::
 
 We can do this using a list called
 `sys.argv <https://docs.python.org/3/library/sys.html#sys.argv>`_.  If we write
-this little bit of python in a file `sys.argv.py` and execute it, we see::
+this little bit of python in a file called `sys.argv.py` and execute it,xi
+we see::
 
     import sys
     print(sys.argv)
@@ -20,9 +21,9 @@ this little bit of python in a file `sys.argv.py` and execute it, we see::
 Note that `sys.argv` is just a regular python list and contains the number `2`
 and `3` that we typed in, along with the name of the script executed as the 
 first element of the list.  Your python code can read the `2` and `3` values
-from the list.  Note that all the elements os `sys.argv` are strings.
+from the list.  Note that all the elements of `sys.argv` are strings.
 
-So we have modified code for this program::
+So the code for this program is::
 
     """
     Accept two integer numbers from the command line and print the sum.
