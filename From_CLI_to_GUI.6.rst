@@ -2,7 +2,7 @@ Helping the user
 ----------------
 
 The previous program printed short messages when the user entered incorrect
-parameters.  For this little etude that's probably good enough.  But when a
+parameters.  For this little etude that's probably good enough, but when a
 program has a more complicated set of parameters it's better to give the user
 more help.
 
