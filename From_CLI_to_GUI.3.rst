@@ -91,7 +91,6 @@ command line, like this::
     $ python3 From_CLI_to_GUI.4.py 2 3
     The sum of 2 and 3 is 5
 
-Look on the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.4>`_
-for the solution.
+We'll do this on the
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.4>`_.
         
