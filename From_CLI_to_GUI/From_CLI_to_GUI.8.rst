@@ -56,7 +56,7 @@ Don't worry too much about what some of that code is doing just yet, though you
 should be able to see where the two Entry widgets and the Button are created.
 When we run the code we see this:
 
-.. image:: From_CLI_to_GUI.8.0.png
+.. image:: From_CLI_to_GUI/From_CLI_to_GUI.8.0.png
     :width: 200pt
 
 Note that nothing works.  You can enter integer values into the Entry widgets,
