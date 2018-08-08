@@ -6,7 +6,9 @@ We noticed that passing incorrect parameters to the CLI program resulted in
 user entered "3.0" and "three" at the prompt.  The error checking code used
 to nicely catch those errors will also work here.  But getting parameters
 from `sys.argv` opens the possibility of a different sort of error - what
-happens if the user doesn't give us enough paramaters?::
+happens if the user doesn't give us enough parameters?
+
+::
 
     $ python3 From_CLI_to_GUI.5.py 2
     Traceback (most recent call last):
@@ -23,7 +25,9 @@ little `sys.argv.py` program with the same parameters::
 
 How can we check if the user gave us the right number of parameters?  `sys.argv`
 is just a python list, and we can check the length of a list with the
-`len() function <https://docs.python.org/3/library/functions.html#len>`_::
+`len() function <https://docs.python.org/3/library/functions.html#len>`_.
+We also add a helper function to check that the parameters given can be
+converted to an integer::
 
     """
     Accept two integer numbers from the command line and print the sum.
@@ -31,14 +35,24 @@ is just a python list, and we can check the length of a list with the
 
     import sys
 
+    def ensure_int(int_str):
+        """Convert a string to an integer and return the integer value"""
+
+        try:
+            int_value = int(int_str)
+            return int_value
+        except ValueError:
+            print(f'Sorry, only want integers.  Something like 123.')
+            sys.exit(1)
+
     # check that we have the right number of parameters
     if len(sys.argv) != 3:
         print('Wrong number of parameters!')
         sys.exit(1)
 
     # get the numbers from the command line sys.argv
-    int1 = int(sys.argv[1])
-    int2 = int(sys.argv[2])
+    int1 = ensure_int(sys.argv[1])
+    int2 = ensure_int(sys.argv[2])
     the_sum = int1 + int2
     print(f'The sum of {int1} and {int2} is {the_sum}')
 
