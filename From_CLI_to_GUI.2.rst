@@ -57,11 +57,11 @@ code fragment)::
         except ValueError:
             print(f'Sorry, only want integers.  Something like 123.')
 
-Since we may ask the user to try a multiple number of times we use a while loop.
-This means we'll ask the user again and again until we break out of the loop.
-Note that if no exception is raised the code will execute the `break` statement
-and exit the `while` loop.  Putting that new code into our program for both
-input numbers, we get::
+Since we may ask the user to try a multiple number of times we use a `while`
+loop.  This means we'll ask the user again and again until we break out of the
+loop.  Note that if no exception is raised the code will execute the `break`
+statement and exit the `while` loop.  Putting that new code into our program for
+both input numbers, we get::
 
     """
     Prompt the user for two integer numbers and print the sum.
