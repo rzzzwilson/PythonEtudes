@@ -1,7 +1,7 @@
 GUI programming
 ---------------
 
-Checking for errors is similar to what we have done before.  The modified
+We check for errors in the same manner that we have used before.  The modified
 program is::
 
     """
