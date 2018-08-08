@@ -18,7 +18,7 @@ different::
         int2 = int(int2)
     ValueError: invalid literal for int() with base 10: '3.0'
 
-Testing has two parts::
+Testing has two parts:
 
 - testing what the code does for correct inputs, and
 - testing what the code does for incorrect inputs.
