@@ -7,7 +7,7 @@ Now we want to change our CLI program into a GUI program.  We will use
 GUI programming is a bit different from CLI programming.  CLI programming is
 imperative, that is, the code asks the user for input, gets the response,
 converts it into an integer, and so on, always in control.  A GUI program
-doesn't do that, it draws the graphical elements of the user interface and then
+doesn't do that: it draws the graphical elements of the user interface and then
 just waits for the user to do something.  These "somethings" the user does,
 press a button or enter text, are called `events`.  A GUI program doesn't know
 what event will happen next.  This changes the way we program.
@@ -34,10 +34,8 @@ The simplest way to write the graphical parts of the program is::
 
     from tkinter import *       # this is bad practice, see later examples
 
-
     class App:
         def __init__(self, master):
-
             frame = Frame(master)
             frame.pack()
 
