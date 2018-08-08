@@ -87,4 +87,4 @@ used `sys.argv`.
 
 On the
 `next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.10>`_
-we handle the errors in a way that should becoming failiar to you.
+we handle the errors in a way that should be becoming failiar to you.
