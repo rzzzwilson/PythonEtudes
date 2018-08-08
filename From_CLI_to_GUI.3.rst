@@ -2,7 +2,7 @@ Refactoring
 -----------
 
 Our solution works well so far, but we have a lot of duplicated code.  It's
-often a good idea to remove duplicated code, replacing it with a function.
+usually a good idea to remove duplicated code, replacing it with a function.
 We call this `refactoring <https://en.wikipedia.org/wiki/Code_refactoring>`_.
 
 This is our duplicated code::
@@ -24,9 +24,9 @@ This is our duplicated code::
             print(f'Sorry, only want integers.  Something like 123.')
 
 Note that the two bits of code are identical except for the prompt strings and
-the variables used to hold the resultant integer.  We can write a function that
+the variables used to hold the result integer.  We can write a function that
 does what one piece of code does.  We handle the prompt string difference by
-passing that into the function when we call it.  The resultant integer is
+passing that into the function when we call it.  The result integer is
 returned by the function and placed into a variable of our choice.
 
 So now our code looks like this::
@@ -52,9 +52,9 @@ So now our code looks like this::
     print(f'The sum of {int1} and {int2} is {the_sum}')
 
 Note that even though we added the new function the number of lines of code
-decreased from the previous version.  That's not *always* true and it's
+decreased from the previous version.  That's not always true and it's
 actually unimportant.  The real win from this change is that we have simplified
-the top-level code::
+the top-level code to this::
 
     int1 = get_integer('Enter the first integer: ')
     int2 = get_integer('Enter the second integer: ')
@@ -63,7 +63,7 @@ the top-level code::
 
 Before, all that *while* loop code distracted us from seeing what was actually
 happening at a logical level.  We now have a function **get_integer()** that,
-once we have figured out what it does, we can **forget about** the details of
+once we have figured out what it does, we can forget about the details of
 how it works because that isn't important at the top-level.  We have actually
 simplified the logic of the program.
 
