@@ -20,8 +20,8 @@ different::
 
 Testing has two parts::
 
-* testing what the code does for correct inputs, and
-* testing what the code does for incorrect inputs.
+- testing what the code does for correct inputs, and
+- testing what the code does for incorrect inputs.
 
 The test above showed that our solution crashed when one of the input values
 was a floating point number.  The exception occurred when we tried to convert
@@ -46,7 +46,7 @@ It's tempting to say "well, that's the user's problem, we did ask for integers",
 but when you write software for people to use it's nice to not just crash when
 the user inputs something unacceptable.  It's far better to point out their
 error, give them a little direction and ask them to try again.  One way of doing
-this in python is something like this (we handle just get one number in this
+this in python is something like this (we handle just one number in this
 code fragment)::
 
     while True:
@@ -59,7 +59,7 @@ code fragment)::
 
 Since we may ask the user to try a multiple number of times we use a while loop.
 This means we'll ask the user again and again until we break out of the loop.
-Putting that new code into our program, we get::
+Putting that new code into our program for both input numbers, we get::
 
     """
     Prompt the user for two integer numbers and print the sum.
