@@ -63,5 +63,5 @@ we get::
     Sorry, need two integer strings.
 
 Printing error messages to the console isn't good practice.  On the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.11>`_.
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.11>`_
 we use a more GUI approach.
