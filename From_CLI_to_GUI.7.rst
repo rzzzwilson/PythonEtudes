@@ -101,5 +101,5 @@ code should behave exactly as it did before::
 
 We have just about exhausted the improvements we can make to the simple CLI
 program.  On the 
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.6>`_
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.8>`_
 we discuss making a GUI version.
