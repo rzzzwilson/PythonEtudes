@@ -57,7 +57,6 @@ should be able to see where the two Entry widgets and the Button are created.
 When we run the code we see this:
 
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.8.0.png
-    :width: 200pt
 
 Note that nothing works.  You can enter integer values into the Entry widgets,
 but pressing the "+" button does nothing.

@@ -48,9 +48,7 @@ function called `self.do_sum()`.  The complete program is::
 
 Note that the Button constructor has an extra parameter `width=10` that sets the
 width of the button just a bit wider than the default width to make pressing it
-easier.  The new program looks like this:
-
-.. image:: From_CLI_to_GUI/From_CLI_to_GUI.9.0.png
+easier.
 
 We also have to define the `self.do_sum()` function.  The `self` part means it
 is a method of the `App` class that defines the GUI application.  In that method
