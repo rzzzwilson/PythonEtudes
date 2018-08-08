@@ -76,15 +76,15 @@ The two new methods `info()` and `error()` display information and error
 messages, respectively.  When we conduct tests on the new program we see the
 normal result dialog and the error dialogs resulting from various inputs.
 
-Normal result::
+Normal result:
 
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.11.0.png
 
-Error due to a bad integer string::
+Error due to a bad integer string:
 
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.11.1.png
 
-Error due to a missing integer string::
+Error due to a missing integer string:
 
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.11.2.png
 
