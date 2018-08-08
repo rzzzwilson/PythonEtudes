@@ -9,11 +9,12 @@ like this::
 
 We can do this using a list called
 `sys.argv <https://docs.python.org/3/library/sys.html#sys.argv>`_.  If we write
-this little bit of python in a file called `sys.argv.py` and execute it,xi
-we see::
+this little bit of python in a file called `sys.argv.py`::
 
     import sys
     print(sys.argv)
+
+and execute it, we see::
 
     $ python3 sys.argv.py 2 3
     ['sys.argv.py', '2', '3']
