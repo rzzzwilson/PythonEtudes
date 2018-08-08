@@ -2,7 +2,7 @@ Error checking
 --------------
 
 We noticed that passing incorrect parameters to the CLI program resulted in
-`ValueError` exceptions similar to those from the original program when the
+`ValueError` exceptions, similar to those from the original program when the
 user entered "3.0" and "three" at the prompt.  The error checking code used
 to nicely catch those errors will also work here.  But getting parameters
 from `sys.argv` opens the possibility of a different sort of error - what
