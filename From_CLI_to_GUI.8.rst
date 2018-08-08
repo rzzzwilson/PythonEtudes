@@ -56,10 +56,9 @@ The simplest way to write the graphical parts of the program is::
 
 Don't worry too much about what some of that code is doing just yet, though you
 should be able to see where the two Entry widgets and the Button are created.
-When we run the code we see:
+When we run the code we see this:
 
-.. image:: From_CLI_to_GUI.8.0.png
-    :width: 40pt
+.. image:: From_CLI_to_GUI.8.0.png :width: 200pt
 
 Note that nothing works.  You can enter integer values into the Entry widgets,
 but pressing the "+" button does nothing.
