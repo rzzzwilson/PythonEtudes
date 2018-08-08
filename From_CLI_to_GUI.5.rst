@@ -23,8 +23,9 @@ little `sys.argv.py` program with the same parameters::
     $ python3 sys.argv.py 2
     ['sys.argv.py', '2']
 
-How can we check if the user gave us the right number of parameters?  `sys.argv`
-is just a python list, and we can check the length of a list with the
+Only two elements in the list!  How can we check if the user gave us the right
+number of parameters?  `sys.argv` is just a python list, and we can check the
+length of a list with the
 `len() function <https://docs.python.org/3/library/functions.html#len>`_.
 We also add a helper function to check that the parameters given can be
 converted to an integer::
@@ -68,11 +69,15 @@ because we changed the way our code worked.
 
 Now when we test our code with varying numbers of parameters we see::
 
-    $ python3 From_CLI_to_GUI.6.py 2
+    $ python3 From_CLI_to_GUI.5.py 2
     Wrong number of parameters!
-    $ python3 From_CLI_to_GUI.6.py 2 3
+    $ python3 From_CLI_to_GUI.5.py 2 3
     The sum of 2 and 3 is 5
-    $ python3 From_CLI_to_GUI.6.py 2 3 4
+    $ python3 From_CLI_to_GUI.5.py 2 3.0
+    Sorry, only want integers.  Something like 123.
+    $ python3 From_CLI_to_GUI.5.py 2 three
+    Sorry, only want integers.  Something like 123.
+    $ python3 From_CLI_to_GUI.5.py 2 3 4
     Wrong number of parameters!
 
 On the 
