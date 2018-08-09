@@ -12,8 +12,8 @@ In this program the two mistakes the user can make are:
 * enter a non-integer string into an Entry widget.
 
 Not allowing the user to press the "=" button when one or more Entry widgets
-are empty is easy: we jusst disable the button until both widgets are non-empty.
-How we do that are dependant on the particular GUI framework used, but for all
+are empty is easy: we just disable the button until both widgets are non-empty.
+How we do that is dependant on the particular GUI framework used, but for all
 of them we must have logic that checks both widgets whenever there is a change
 in either of them, and set the state of the Button accordingly.  In this program
 the `check_valid()` function does all the work.  We just have to call the
@@ -90,8 +90,10 @@ The final program is::
     app = App(root)
     root.mainloop()
 
-The program as it is now has a better levelof user-friendliness and doesn't
-let the user make mistakes.  We've come a long way from the initial program::
+Note that we no longet have any error messages.  The user can't make a mistake
+and now has a better level of user-friendliness.
+
+We've come a long way from the initial program::
 
     """
     Prompt the user for two integer numbers and print the sum.
