@@ -81,10 +81,9 @@ and pressing the "+" Button::
         int2 = int(int2)
     ValueError: invalid literal for int() with base 10: ''
 
-We have the expected errors from improper integer strings plus an error similar
-to the error when the user didn't supply enough parameters for the program that
-used `sys.argv`.
+We have the expected errors from improper integer strings plus an error because
+didn't put any text into an Entry widget.
 
 On the
 `next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.10>`_
-we handle the errors in a way that should be becoming failiar to you.
+we handle the errors in a way that should be becoming familiar to you.

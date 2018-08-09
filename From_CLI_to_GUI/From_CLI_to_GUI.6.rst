@@ -14,7 +14,9 @@ users, though this "usage" information was shorter.
 
 We will add this idea to our program.  Because we have more than one place in
 our code where we report a user error it makes sense that this extra code is
-put into a function which we will call `usage()`::
+put into a function which we will call `usage()`.  The function takes an
+optional parameter, an error string, for the times when we need to tell the user
+exactly what went wrong::
 
     """
     Accept two integer numbers from the command line and print the sum.
@@ -90,5 +92,5 @@ When we test our code we see::
 
 On the
 `next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.7>`_
-we will make this `usage()` function  little more general.
+we will make this `usage()` function more general.
 

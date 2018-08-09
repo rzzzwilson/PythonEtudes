@@ -59,7 +59,7 @@ converted to an integer::
 
 Note that even though we want two parameter numbers we check to make sure that
 `sys.argv` has length 3 because the list also includes the script name at
-index 0.  Also note that we check that `sys.argv` has exactly **three**
+index 0.  Also note that we check that `sys.argv` has **exactly** three
 elements, not just three or more.  If the user supplies more numbers than we can
 use our code won't crash, but it's better that the user uses our code properly.
 It is better to limit the user like this because it's possible that we want to

@@ -90,8 +90,8 @@ The final program is::
     app = App(root)
     root.mainloop()
 
-Note that we no longet have any error messages.  The user can't make a mistake
-and now has a better level of user-friendliness.
+Note that we no longer have any error messages.  The user can't make a mistake
+and the program is more user-friendly.
 
 We've come a long way from the initial program::
 

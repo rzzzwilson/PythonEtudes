@@ -63,7 +63,7 @@ the top-level code to this::
 
 Before, all that *while* loop code distracted us from seeing what was actually
 happening at a logical level.  We now have a function **get_integer()** that,
-once we have figured out what it does, we can forget about the details of
+once we have figured out what it does, we can forget the details of
 how it works because that isn't important at the top-level.  We have actually
 simplified the logic of the program.
 
