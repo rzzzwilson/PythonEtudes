@@ -110,7 +110,8 @@ easy to use is not insignificant, but it's worth it!
 What next?
 ----------
 
-Our "add two numbers" program isn't complete.  What program ever is?
+Our "add two numbers" program isn't complete.  What program ever is?  Here are a
+few suggestions for improvement.
 
 We can't input a negative integer.  That wouldn't be hard to add - we just need
 to make the `check_valid()` function handle an optional leading "-" sign.
