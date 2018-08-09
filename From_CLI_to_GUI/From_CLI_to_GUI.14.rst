@@ -76,5 +76,5 @@ the `width=` parameters, etc.  This isn't an etude on tkinter!
 Note that we no longer need the `self.info()` routine.
 
 On the
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.13>`_
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.14>`_
 we will discuss some more advanced GUI design.

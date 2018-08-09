@@ -89,5 +89,5 @@ Error due to a missing integer string:
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.11.2.png
 
 On the 
-`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.11>`_
+`next page <https://github.com/rzzzwilson/PythonEtudes/wiki/From_CLI_to_GUI.12>`_
 we discuss and implement methods of presenting a better GUI to the user.
