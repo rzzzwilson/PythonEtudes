@@ -8,7 +8,7 @@ serious error or when the user has to make a decision (eg, overwrite file?).
 
 We only need to display a single number so we could change the GUI screen to
 include a Label whose text we can update to show a valid result.  The program
-now looks like:
+now looks like::
 
     """
     Display the sum of two integers when a button is pressed.
