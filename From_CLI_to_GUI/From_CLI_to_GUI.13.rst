@@ -85,20 +85,33 @@ The final program is::
             the_sum = int1 + int2
             self.result['text'] = f'{the_sum}'
 
-        def str_to_int(self, value):
-            """Get an integer from a string.  Return None if can't get integer."""
-
-            try:
-                result = int(value)
-                return result
-            except ValueError:
-                return None
-
 
     root = Tk()
     app = App(root)
     root.mainloop()
 
-The program is now starting to approach a level of user-friendliness and doesn't
-let the user make mistakes.  The amount of code you have to write to make a GUI
-application pleasant and easier to use is not insignificant, but it's worth it!
+The program as it is now has a better levelof user-friendliness and doesn't
+let the user make mistakes.  We've come a long way from the initial program::
+
+    """
+    Prompt the user for two integer numbers and print the sum.
+    """
+    
+    int1 = input('Enter the first integer: ')
+    int2 = input('Enter the second integer: ')
+    the_sum = int1 + int2
+    print(f'The sum of {int1} and {int2} is {the_sum}')
+
+The amount of code you have to write to make a GUI application pleasant and
+easy to use is not insignificant, but it's worth it!
+
+What next?
+----------
+
+Our "add two numbers" program isn't complete.  What program ever is?
+
+We can't input a negative integer.  That wouldn't be hard to add - we just need
+to make the `check_valid()` handle an optional leading "-" sign.
+
+We should allow floating point numbers.  Again, modify `check_valid()` to allow
+floats and change the `int()` calls in `do_sum()` to `float()` calls.
