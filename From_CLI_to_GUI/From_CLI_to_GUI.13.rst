@@ -114,7 +114,10 @@ Our "add two numbers" program isn't complete.  What program ever is?  Here are a
 few suggestions for improvement.
 
 We can't input a negative integer.  That wouldn't be hard to add - we just need
-to make the `check_valid()` function handle an optional leading "-" sign.
+to make the `check_valid()` function handle an optional leading "-" sign.  Or
+maybe a better idea is to change the code in the `check_valid()` function 
+completely.  Just try to convert the text string to an int and return False
+if we can't.
 
 We should allow floating point numbers.  Again, modify `check_valid()` to allow
 floats and change the `int()` calls in `do_sum()` to `float()` calls.
