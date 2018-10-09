@@ -74,7 +74,7 @@ duplication.
 Testing
 -------
 
-Repeating the simple test shows that the code behaves axactly as before::
+Repeating the simple test shows that the code behaves exactly as before::
 
     $ python3 From_CLI_to_GUI.3.py
     Enter the first integer: 2
