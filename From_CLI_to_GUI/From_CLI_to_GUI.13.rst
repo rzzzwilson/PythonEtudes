@@ -93,6 +93,14 @@ The final program is::
 Note that we no longer have any error messages.  The user can't make a mistake
 and the program is more user-friendly.
 
+When we run the program note that the "=" button is disables - trying to press
+it does nothing.  Here's the program after we have entered one number only::
+
+.. image:: From_CLI_to_GUI/From_CLI_to_GUI.13.0.png
+
+The button is disabled and when you try to enter "abc" into the other Entry
+widget nothing happens.  Non-digit characters are ignored!
+
 We've come a long way from the initial program::
 
     """
