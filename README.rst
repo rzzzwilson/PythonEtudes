@@ -52,5 +52,5 @@ As with "From CLI to GUI", start with a CLI program that:
 10. allow builtin functions like "pow(a, 2)", "ln(a)", etc
 11. allow user-defined functions
 
-At some point relax "require spaces" rule~
+At some point relax "require spaces" rule.
 
