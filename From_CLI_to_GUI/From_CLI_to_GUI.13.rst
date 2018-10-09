@@ -98,6 +98,8 @@ it does nothing.  Here is the program after we have entered one number only:
 
 .. image:: From_CLI_to_GUI/From_CLI_to_GUI.13.0.png
 
+XYZZY
+
 The button is disabled and when you try to enter "abc" into the other Entry
 widget nothing happens.  Non-digit characters are ignored!
 
