@@ -17,8 +17,8 @@ class App:
         self.integer2 = Entry(frame)
         self.integer2.pack(side=LEFT)
 
-        self.do_sum = Button(frame, text="+")
-        self.do_sum.pack(side=LEFT)
+        self.btn_sum = Button(frame, text="+")
+        self.btn_sum.pack(side=LEFT)
 
 root = Tk()
 app = App(root)

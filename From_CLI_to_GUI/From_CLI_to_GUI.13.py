@@ -25,8 +25,8 @@ class App:
         self.integer2 = Entry(frame, width=10, validate='key', vcmd=(val, '%S'))
         self.integer2.grid(row=0, column=2)
 
-        self.do_sum = Button(frame, text='=', width=3, state='disabled', command=self.do_sum)
-        self.do_sum.grid(row=0, column=3)
+        self.btn_sum = Button(frame, text='=', width=3, state='disabled', command=self.do_sum)
+        self.btn_sum.grid(row=0, column=3)
 
         # label to hold the result
         self.result = Label(master, width=10, relief=GROOVE)
@@ -44,9 +44,9 @@ class App:
         """Check if Entry widgets contain text.  Enable Button if so."""
 
         self.result['text'] = ''
-        self.do_sum['state'] = 'disabled'
+        self.btn_sum['state'] = 'disabled'
         if self.integer1.get() and self.integer2.get():
-            self.do_sum['state'] = 'normal'
+            self.btn_sum['state'] = 'normal'
 
     def do_sum(self):
         """Sum the two numbers.  We know both fields are integers."""

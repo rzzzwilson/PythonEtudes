@@ -1,5 +1,7 @@
 """
 Accept two integer numbers from the command line and print the sum.
+
+Usage: From_CLI_to_GUI.5.py <integer> <integer>
 """
 
 import sys

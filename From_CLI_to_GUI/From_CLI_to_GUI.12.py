@@ -20,8 +20,8 @@ class App:
         self.integer2 = Entry(frame, width=10)
         self.integer2.pack(side=LEFT)
 
-        self.do_sum = Button(frame, text='=', width=3, command=self.do_sum)
-        self.do_sum.pack(side=LEFT)
+        self.btn_sum = Button(frame, text='=', width=3, command=self.do_sum)
+        self.btn_sum.pack(side=LEFT)
 
         self.result = Label(master)     # label to hold the result
         self.result.pack(side=BOTTOM, fill=X)

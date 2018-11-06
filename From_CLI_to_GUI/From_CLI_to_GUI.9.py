@@ -17,8 +17,8 @@ class App:
         self.integer2 = Entry(frame)
         self.integer2.pack(side=LEFT)
 
-        self.do_sum = Button(frame, text="+", width=10, command=self.do_sum)
-        self.do_sum.pack(side=LEFT)
+        self.btn_sum = Button(frame, text="+", width=10, command=self.do_sum)
+        self.btn_sum.pack(side=LEFT)
 
     def do_sum(self):
         int1 = self.integer1.get()      # get the text in the first Entry box
