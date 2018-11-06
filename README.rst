@@ -54,3 +54,12 @@ As with "From CLI to GUI", start with a CLI program that:
 
 At some point relax "require spaces" rule.
 
+Hangman
+=======
+
+Starting with the question on /r/learnpython:
+
+https://www.reddit.com/r/learnpython/comments/9t6h2t/how_can_i_improve_on_my_code_for_hang_man_game/
+
+write a command line solution and then, as before, progress to a GUI solution
+using tkinter.
