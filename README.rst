@@ -5,6 +5,8 @@
 +------------------------------+-----------------------------------------------+
 | `From CLI to GUI`_           | adding two numbers together                   |
 +------------------------------+-----------------------------------------------+
+| `Expression Recognizer`_     | Recognize simple expressions                  |
++------------------------------+-----------------------------------------------+
 
 Welcome to the Python Etudes wiki!
 
@@ -36,9 +38,7 @@ The code for this etude is
 Expression Recognizer
 =====================
 
-Not yet written.
-
-As with "From CLI to GUI", start with a CLI program that:
+Write a console program that:
 
 1. accepts "int op int", print result, op = +-/* (require spaces)
 2. allow "float op float", same ops
@@ -54,8 +54,17 @@ As with "From CLI to GUI", start with a CLI program that:
 
 At some point relax "require spaces" rule.
 
+Also write a GUI version.
+
+The etude starts 
+`here <https://github.com/rzzzwilson/PythonEtudes/wiki/Expression_Recognizer.0>`_,
+and the code is 
+`here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Expression_Recognizer>`_.
+
 Hangman
 =======
+
+Not yet written.
 
 Starting with the question on /r/learnpython:
 
