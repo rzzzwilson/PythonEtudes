@@ -18,3 +18,5 @@ Write a program that:
 At some point relax "require spaces" rule.
 
 Then write a GUI version.
+
+The etudes start `here <>`_ and the code is `here <>`_.
