@@ -57,7 +57,7 @@ At some point relax "require spaces" rule.
 Also write a GUI version.
 
 The etude starts 
-`here <https://github.com/rzzzwilson/PythonEtudes/wiki/Expression_Recognizer.0>`_,
+`here <https://github.com/rzzzwilson/PythonEtudes/wiki/Expression_Recognizer.00>`_,
 and the code is 
 `here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Expression_Recognizer>`_.
 
