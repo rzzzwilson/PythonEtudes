@@ -15,8 +15,5 @@ if operator == '+':
     result = integer1 + integer2
 elif operator == '-':
     result = integer1 - integer2
-else:
-    print(f"Unrecognized operator: '{operator}'")
-    sys.exit(1)     # exut here
 
-print(f'Expresssion {integer1} {operator} {integer2} = {result}')
+print(f'Expression {integer1} {operator} {integer2} = {result}')
