@@ -1,7 +1,8 @@
 """
+Expression_Recognizer.00.py
 Read a simple expression from the user and print the result.
 
-Recognizesan expression of the form: <integer> <operator> <integer>
+Recognizes an expression of the form: <integer> <operator> <integer>
 where <operator> may be either '+' or '-'.
 """
 
