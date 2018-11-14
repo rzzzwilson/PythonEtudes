@@ -1,29 +1,33 @@
 """
-Read a simple expression from sys.argv and print the result.
-Handle a range of errors.
+Expression_Recognizer.01.py
+Read a simple expression from the user and print the result.
+Check parameters for some errors.
 
-Usage: Expression_Recognizer.01.py <integer> <operator> <integer>
+Recognizes an expression of the form: <integer> <operator> <integer>
+where <operator> may be either '+' or '-'.
 """
 
 import sys
 
-args = sys.argv[1:]
-if len(args) != 3:
-    print('You must supply three parameters: <integer> <operator> <integer>')
+expression = input('Enter expression: ')
+fields = expression.split()
+
+try:
+    (integer1, operator, integer2) = fields
+except ValueError:
+    print(f"Expected an expression of three fields: <integer> <operator> <integer>\nGot: '{expression}'")
     sys.exit(1)
 
 try:
-    integer1 = int(args[0])
+    integer1 = int(integer1)
 except ValueError:
-    print('You must supply three parameters: <integer> <operator> <integer>')
+    print(f"The first number must be an integer\nGot: '{integer1}'")
     sys.exit(1)
 
-operator = args[1]
-
 try:
-    integer2 = int(args[2])
+    integer2 = int(integer2)
 except ValueError:
-    print('You must supply three parameters: <integer> <operator> <integer>')
+    print(f"The second number must be an integer\nGot: '{integer1}'")
     sys.exit(1)
 
 if operator == '+':
@@ -31,7 +35,7 @@ if operator == '+':
 elif operator == '-':
     result = integer1 - integer2
 else:
-    print(f"Sorry, operator '{operator}' isn't valid, must be only '+' or '-'")
+    print(f"The operator must be '+' or '-', got '{operator}'")
     sys.exit(1)
 
 print(f'Expression {integer1} {operator} {integer2} = {result}')
