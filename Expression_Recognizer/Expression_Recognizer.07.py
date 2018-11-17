@@ -19,7 +19,7 @@ class Token:
         self.value = value
 
     def __repr__(self):
-        return f"<Token {Token.tok_str[self.type]}: '{self.value}'>"
+        return f"<{Token.tok_str[self.type]}: '{self.value}'>"
 
 def get_next_char(s):
     """A generator to return chars one at a time.
