@@ -72,3 +72,14 @@ https://www.reddit.com/r/learnpython/comments/9t6h2t/how_can_i_improve_on_my_cod
 
 write a command line solution and then, as before, progress to a GUI solution
 using tkinter.
+
+Two jugs problem
+================
+
+Not yet written.
+
+Starting with a question on /r/learnpython:
+
+https://ps.reddit.com/r/learnpython/comments/9y54oz/trying_to_create_create_code_you_have_2_jugs_of/
+
+write a command line solution.

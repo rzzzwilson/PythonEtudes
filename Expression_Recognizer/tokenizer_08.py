@@ -1,9 +1,6 @@
 """
-Expression_Recognizer.07.py
-Read a simple expression from the user and tokenize it.
+The tokenizer.08.py module.
 """
-
-import sys
 
 class Token:
     """A class for simple Tokens."""
@@ -122,12 +119,3 @@ def tokenizer(s):
             raise SyntaxError(f"unrecognized character: '{next_ch}'")
 
     return token_list
-
-# test the tokenizer() function
-while True:
-    expression = input('Enter expression: ')
-    if not expression:
-        # nothing entered, quit
-        break
-    token_list = tokenizer(expression)
-    print(f'token_list = {token_list}')
