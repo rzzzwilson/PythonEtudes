@@ -5,9 +5,9 @@ Write a console program that:
 
 1. accepts "int op int", print result, op = +-/* (require spaces)
 2. allow "float op float", same ops
-3. allow power op "**", mod op "%"
+3. allow power op "**", mod op "%"  <-- general parser introduced here
 4. allow "name = exp", "name", same ops, single char names
-5. allow multi-char names  <-- general parser introduced here
+5. allow multi-char names
 6. allow pseudo-ops, like "@vars", "@del name", etc
 7. introduce bit ops, "<<", ">>", "&", "|", "~" and "^
 8. introduce logical operators "&&", "||"
