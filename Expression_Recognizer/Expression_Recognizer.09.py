@@ -94,7 +94,7 @@ def get_factor():
     negative = False        # assume a leading '+'
     if next_tok.type == Token.token_operator:
         if next_tok.value not in '+-':
-            raise EvaluationError(f"Expected leading '=' or '-', but got {next_tok}")
+            raise EvaluationError(f"Expected leading '+' or '-', but got {next_tok}")
         negative = (next_tok.value == '-')
         next_tok = next(tok_stream)
 
