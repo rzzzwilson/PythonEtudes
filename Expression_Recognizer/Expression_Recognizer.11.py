@@ -6,10 +6,6 @@ Allow use of named variables.
 <expression>   ::= <term> { ('+'|'-') <term> }*
 <term>         ::= <factor> { ('*'|'/'|'**'|'%') <factor> }*
 <factor>       ::= <variable> | '(' <expression> ')' | ['+'|'-'] ( <integer> | <float> )
-<variable>     ::= <alphabetic> { ( '_' | <alphanumeric> ) }*
-<alphabetic>   ::= 'a'|'A' ... 'z'|'Z'
-<numeric>      ::= '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|
-<alphanumeric> ::= <alphabetic> | <numeric> | '_'
 """
 
 from tokenizer_11 import tokenizer, Token, SyntaxError
@@ -69,7 +65,7 @@ def get_expression():
 
     # otherwise check that we have finished the input token stream
     if next_tok is not None:
-        raise(EvaluationError(f'Unexpected end of expression, next token is {next_tok}'))
+        raise(EvaluationError(f'Extra data after expression, next token is {next_tok}'))
 
     return result
 
@@ -101,7 +97,7 @@ def get_term():
 def get_factor():
     """Recognize the EBNF for a <factor>:
 
-        <factor> ::= <name> [ '=' <expression> ] | '(' <expression> ')' | ['+'|'-'] ( <integer> | <float> )
+        <factor> ::= <variable> | '(' <expression> ')' | ['+'|'-'] ( <integer> | <float> )
     """
 
     global next_tok, nesting
@@ -109,7 +105,7 @@ def get_factor():
     if (next_tok is None
          or next_tok.type not in [Token.token_name, Token.token_operator,
                                   Token.token_integer, Token.token_float]):
-        raise EvaluationError(f'Expected integer or float, but got {next_tok}')
+        raise EvaluationError(f'Expected name, operator, integer or float, but got {next_tok}')
 
     # check for a name first
     if next_tok.type == Token.token_name:
