@@ -187,4 +187,5 @@ while True:
         print(e)
         continue
 
-    print(f'result = {result}')
+    if result:
+        print(f'result = {result}')
