@@ -1,10 +1,10 @@
 """
 Expression_Recognizer.09.py
-Read a simple expression from the user and tokenize it.
+Read a simple expression from the user and parse it.
 Handle errors in a more graceful way.
 """
 
-from tokenizer_08 import tokenizer, Token, SyntaxError
+from tokenizer_09 import tokenizer, Token, SyntaxError
 
 class EvaluationError(Exception):
     """Exception raised when there's a problem evaluating the expression."""

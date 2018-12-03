@@ -1,6 +1,6 @@
 """
 Expression_Recognizer.11.py
-Read a simple expression from the user and tokenize it.
+Read a simple expression from the user and parse it.
 Allow use of named variables.
 
 <expression>   ::= <term> { ('+'|'-') <term> }*

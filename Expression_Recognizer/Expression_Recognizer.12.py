@@ -1,6 +1,6 @@
 """
-Expression_Recognizer.11.py
-Read a simple expression from the user and tokenize it.
+Expression_Recognizer.12.py
+Read a simple expression from the user and parse it.
 Allow use of named variables.
 
 <expression>  ::=  <term> { ('+'|'-') <term> }*
@@ -9,7 +9,7 @@ Allow use of named variables.
 """
 
 import string
-from tokenizer_11 import tokenizer, Token, SyntaxError
+from tokenizer_12 import tokenizer, Token, SyntaxError
 
 # get string of allowed alphabetic characters
 Alphabetic = string.ascii_lowercase + string.ascii_uppercase
@@ -139,8 +139,120 @@ def get_factor():
 
     return result
 
+def dump_environment(args):
+    """Dump the environment.
 
-# test the parser
+    args  list of variable names to dump
+
+    If 'args' is None, list all Environment variables.
+    """
+
+    if args:
+        max_name_len = 0
+        for name in args:
+            max_name_len = max(max_name_len, len(name))
+
+        for name in args:
+            if name in Environment:
+                print('%-*s%f' % (max_name_len + 3, name, Environment[name]))
+            else:
+                print('%-*s%s' % (max_name_len + 3, name, 'UNDEFINED'))
+    else:
+        max_name_len = 0
+        for name in Environment:
+            max_name_len = max(max_name_len, len(name))
+
+        for name in Environment:
+            print('%-*s%f' % (max_name_len + 3, name, Environment[name]))
+
+def handle_command(cmd_str):
+    """Handle the command in the "cmd_str" string."""
+
+    # get initial command word and following args, if any
+    cmd_args = cmd_str.strip().split()
+    print(f"cmd_args={cmd_args}")
+
+    # perform the command
+    cmd = cmd_args[0]
+    args = None
+    if len(cmd_args) > 0:
+        args = cmd_args[1:]
+
+    if cmd == '@var':
+        dump_environment(args)
+    else:
+        print(f"Unrecognized command, got '{cmd}'")
+
+def handle_assignment(assign_str):
+    """Handle the command in the "cmd_str" string."""
+
+    global next_tok, tok_stream, nesting
+
+    # now check that first two tokens are <name> and "="
+    assign_split = assign_str.split('=')
+    if len(assign_split) != 2:
+        # no '=', bad assignment
+        print("Bad assignment, should be: <name> '=' <expression>")
+        return None
+
+    # split string into name and expression parts
+    (name, expression) = assign_split
+    print(f"name='{name}', expression='{expression}'")
+
+    # check name string is just a single name
+    name = name.strip()
+    if len(name.split()) != 1:
+        # bad name
+        print(f"Bad assignment, <name> should be a single word, got '{name}'")
+
+    # prepare the token stream for parsing
+    try:
+        token_list = tokenizer(expression)
+    except SyntaxError as e:
+        print(e)
+        return None
+
+    tok_stream = get_next_token(token_list)
+    next_tok = next(tok_stream)
+    nesting = 0     # number of open parentheses pending
+
+    # evaluate the expression
+    try:
+        result = get_expression()
+    except EvaluationError as e:
+        print(e)
+        return None
+
+    # save the value in the Environment
+    Environment[name] = result
+
+def handle_expression(exp_str):
+    """Parse an expression in "exp_str" string."""
+
+    global next_tok, tok_stream, nesting
+
+    # prepare the token stream for parsing
+    try:
+        token_list = tokenizer(exp_str)
+    except SyntaxError as e:
+        print(e)
+        return None
+    tok_stream = get_next_token(token_list)
+    next_tok = next(tok_stream)
+    nesting = 0     # number of open parentheses pending
+
+    try:
+        result = get_expression()
+    except EvaluationError as e:
+        print(e)
+        return None
+
+    return result
+
+######
+# Evaluate user expressions, handle commands, etc
+######
+
 while True:
     exp_str = input('Enter expression: ')
     if not exp_str:
@@ -151,23 +263,9 @@ while True:
     exp_str = exp_str.strip()   # remove leading/trailing spaces
     if exp_str[0] == '@':
         handle_command(exp_str)
-    elif exp_str[0] in 
-
-    # prepare the token stream
-    try:
-        token_list = tokenizer(exp_str)
-    except SyntaxError as e:
-        print(e)
-        continue
-    tok_stream = get_next_token(token_list)
-    next_tok = next(tok_stream)
-    nesting = 0     # number of open parentheses pending
-
-    try:
-        result = get_expression()
-    except EvaluationError as e:
-        print(e)
-        continue
-
-    if result:
-        print(f'result = {result}')
+    elif exp_str[0] in Alphabetic:
+        handle_assignment(exp_str)
+    else:
+        result = handle_expression(exp_str)
+        if result:
+            print(f'result = {result}')
