@@ -91,3 +91,21 @@ Not yet written.
 
 Taking the idea from `cli_input <https://github.com/rzzzwilson/cli_input>`_,
 develop CLI menus.
+
+Text Adventure
+==============
+
+Not yet written.
+
+Inspired by the myriad cries for help on /r/learnpython (after getting shooed
+of at /r/python!) to fix bugs in a simple text adventure.  Must be an assignment
+somewhere.
+
+Various stages:
+
+* simple "walk around" adventure, discuss methods of storing data
+* add features like short descriptions if recently at a place
+* add objects that the player can pick up
+* add monsters that can't move
+* allow monsters to move
+* discuss creating data and "data editors"
