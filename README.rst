@@ -103,9 +103,9 @@ somewhere.
 
 Various stages:
 
-* simple "walk around" adventure, discuss methods of storing data
+* simple "walk around" adventure, discuss methods of storing data, discuss "forward reference" problem
 * add features like short descriptions if recently at a place
 * add objects that the player can pick up
 * add monsters that can't move
 * allow monsters to move
-* discuss creating data and "data editors"
+* discuss creating data and "data editors", "sanity" checker, etc
