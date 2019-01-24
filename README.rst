@@ -127,6 +127,6 @@ There are lots of lovely details here:
 * get and modify pixel data from an image file
 
 Inspired by
-`this /r/learnpython thread <ihttps://www.reddit.com/r/learnpython/comments/ag31z6/list_and_int_error_not_sure_what_to_do_lsb_steg/>`_.
+`this /r/learnpython thread <https://www.reddit.com/r/learnpython/comments/ag31z6/list_and_int_error_not_sure_what_to_do_lsb_steg/>`_.
 
 
