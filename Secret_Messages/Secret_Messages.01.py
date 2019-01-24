@@ -1,9 +1,9 @@
 """
-Secret_Messages.00.py
+Secret_Messages.01.py
 
-Get pixel data from an image file.
+Encode text characters into an image file.
 
-Usage: Secret_Messages.00.py <input file> <output file>
+Usage: Secret_Messages.01.py <input file> <output file> <text message>
 """
 
 import sys
@@ -25,8 +25,14 @@ image = Image.open(input_filename)
 pixels = list(image.getdata())
 print(f'pixels={pixels}')
 
-# change the pixel data and write it to the output file
-pixels = [(0, 0, 0), (0, 255, 0), (0, 0, 255), (255, 0, 0)]
-print(f'NEW pixels={pixels}')
-image.putdata(pixels)
+# encode each text character into the image pixel RED values
+new_pixels = []
+for (pix, ch) in zip(pixels, text_msg):
+    (r, g, b) = pix
+    xor_r = r ^ ord(ch)
+    new_pixels.append((xor_r, g, b))    # need to append a 3-tuple
+print(f'new_pixels={new_pixels}')
+
+# update the image and write a new file
+image.putdata(new_pixels)
 image.save(output_filename)
