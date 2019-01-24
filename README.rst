@@ -109,3 +109,24 @@ Various stages:
 * add monsters that can't move
 * allow monsters to move
 * discuss creating data and "data editors", "sanity" checker, etc
+
+Secret Messages
+===============
+
+Not yet written.
+
+Write a suite of programs to hide text messages in image files.  One program
+will take an image file and a text message and "hide" the message in the pixel
+data.  Another program will take two images (original and encoded) and reproduce
+the text message.
+
+There are lots of lovely details here:
+
+* get N pixels at a time from a text message
+* convert a stream of N bit values back to a text message
+* get and modify pixel data from an image file
+
+Inspired by
+`this /r/learnpython thread <ihttps://www.reddit.com/r/learnpython/comments/ag31z6/list_and_int_error_not_sure_what_to_do_lsb_steg/>`_.
+
+
