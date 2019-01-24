@@ -26,7 +26,9 @@ pixels = list(image.getdata())
 print(f'pixels={pixels}')
 
 # change the pixel data and write it to the output file
-pixels = [(0, 0, 0), (0, 255, 0), (0, 0, 255), (255, 0, 0)]
-print(f'NEW pixels={pixels}')
-image.putdata(pixels)
+new_pixels = [(0, 0, 0), (0, 255, 0), (0, 0, 255), (255, 0, 0)]
+print(f'new_pixels={new_pixels}')
+
+# save new pixel data into a new image file
+image.putdata(new_pixels)
 image.save(output_filename)
