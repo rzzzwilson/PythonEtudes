@@ -23,6 +23,5 @@ Along the way we will touch on various points:
 
 The etude starts
 `here <https://github.com/rzzzwilson/PythonEtudes/wiki/Secret_Messages.00>`_,
-
 and the code is
 `here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Secret_Messages>`_.
