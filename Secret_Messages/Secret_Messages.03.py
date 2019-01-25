@@ -1,9 +1,9 @@
 """
-Secret_Messages.01.py
+Secret_Messages.03.py
 
 Encode text characters into an image file.
 
-Usage: Secret_Messages.01.py <input file> <output file> <text message>
+Usage: Secret_Messages.03.py <input file> <output file> <text message>
 """
 
 import sys
@@ -84,26 +84,31 @@ def main(input_filename, output_filename, text):
     # prepare the text message "N bits at a time" software
     nbits_init(text, 2)
 
-    # encode each text character into the image pixel RED values
+    # encode each N bits into the image pixel values
     new_pixels = []
     for pix in pixels:
+        # get pixel colour values, handle a fourth value
         if len(pix) == 3:
             (r, g, b) = pix
             a = 255
         if len(pix) == 4:
             (r, g, b, a) = pix
-        nbits = nbits_get()
-        if nbits is None:
-            nbits = 0
+
+        nbits = nbits_get()     # get N bits
+        if nbits is None:       # if None
+            nbits = 0           #     encode a 0 value (no change on XOR)
         xor_r = r ^ nbits
+
         nbits = nbits_get()
         if nbits is None:
             nbits = 0
         xor_g = g ^ nbits
+
         nbits = nbits_get()
         if nbits is None:
             nbits = 0
         xor_b = b ^ nbits
+
         new_pixels.append((xor_r, xor_g, xor_b, a))    # need to append a tuple
 
     # update the image and write a new file
