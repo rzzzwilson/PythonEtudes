@@ -129,4 +129,8 @@ There are lots of lovely details here:
 Inspired by
 `this /r/learnpython thread <https://www.reddit.com/r/learnpython/comments/ag31z6/list_and_int_error_not_sure_what_to_do_lsb_steg/>`_.
 
+The etude starts
+`here <https://github.com/rzzzwilson/PythonEtudes/wiki/Secret_Messages.0>`_.
+The code is
+`here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Secret_Messages>`_.
 
