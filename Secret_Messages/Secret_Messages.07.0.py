@@ -27,9 +27,9 @@ def nbits_init(data, num_bits):
 
     global bit_data, bit_ch_index, bit_char, bit_index, bit_num_bits, bit_mask
 
-    bit_data = str(data)        # the string to process
+    bit_data = bytes(data)      # the string to process
     bit_ch_index = 0            # index in string of next character
-    bit_char = ord(bit_data[0]) # the current character (as integer)
+    bit_char = bit_data[0]      # the current character (as integer)
     bit_index = 8               # index (from right) of next bit field (force next ch)
     bit_num_bits = num_bits     # the number of bits to return
     bit_mask = 2**num_bits - 1  # bit mask for rightmost N bits
@@ -43,11 +43,11 @@ def nbits_get():
     global bit_ch_index, bit_char, bit_index
 
 
-    # move to next character if we need to
+    # move to next byte if we need to
     if bit_index >= 8:
         if bit_ch_index >= len(bit_data):       # if end of text
             return None                         #   return None
-        bit_char = ord(bit_data[bit_ch_index])  # else move to next character
+        bit_char = bit_data[bit_ch_index]       # else move to next byte
         bit_ch_index += 1
         bit_index = 0
 
