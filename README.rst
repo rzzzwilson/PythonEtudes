@@ -113,8 +113,6 @@ Various stages:
 Secret Messages
 ===============
 
-Not yet written.
-
 Write a suite of programs to hide text messages in image files.  One program
 will take an image file and a text message and "hide" the message in the pixel
 data.  Another program will take two images (original and encoded) and reproduce
