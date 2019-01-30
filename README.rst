@@ -25,6 +25,9 @@ for each etude are in this wiki.
 
 All code is written for python 3.6 or later.
 
+If you follow one of these etudes and you find a part not easy to understand or,
+worse, wrong, please send me an email: rzzzwilson@gmail.com .
+
 From CLI to GUI
 ===============
 
