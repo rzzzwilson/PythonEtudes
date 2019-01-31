@@ -15,16 +15,17 @@ def stream(data, num_bits):
         if num_bits not in [1, 2, 4, 8]:
             raise ValueError(f"Bad value for 'num_bits', got {num_bits}, "
                               "expected one of 1, 2, 4 or 8.")
-        mask = 2**num_bits - 1          # bit mask for rightmost N bits
+        mask = 2**num_bits - 1      # bit mask for rightmost N bits
 
-        for ch in data:
-            value = ord(ch)
+        bit_data = bytes(data)
+
+        for ch in bit_data:
             count = 0
             while count < 8:
-                result = value & mask   # get low N bits from variable
-                value >>= num_bits      # shift variable to remove bits we are returning
-                count += num_bits       # bump the bit counter
-                yield result            # return the result N bits
+                result = ch & mask  # get low N bits from variable
+                ch >>= num_bits     # shift variable to remove bits we are returning
+                count += num_bits   # bump the bit counter
+                yield result        # return the result N bits
             
 
 if __name__ == '__main__':

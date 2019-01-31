@@ -11,14 +11,19 @@ Usage: image_iterator.py <image file>
 
 from PIL import Image
 
-def image_iterator(image, num_pixels):
+def image_iterator(image, num_pixels=None):
     """Create an iterator for a number of pixels of an image.
 
-    image  the open Pillow image object
+    image       the open Pillow image object
     num_pixels  the number of pixels to iterate over
+                (if None, use all pixels values in the image)
     """
 
     count = 0
+    if num_pixels is None:
+        (image_width, image_height) = image.size
+        num_pixels = image_width * image_height
+
     for pix in image.getdata():
         # get pixel colour values, assume a missing 'transparency' value is 255
         try:

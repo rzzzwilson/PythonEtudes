@@ -35,7 +35,7 @@ class DecodeBits:
     def get(self):
         """Returns the accumulated string and resets the accumuator."""
 
-        result = self.result
+        result = bytes(self.result).decode(encoding='utf_8')
         self._clear()
         return result
 
