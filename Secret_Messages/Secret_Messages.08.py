@@ -1,61 +1,16 @@
 """
-Secret_Messages.07.0.py
+Secret_Messages.08.py
 
 Encode unicode text characters into an image file.
 
-Usage: Secret_Messages.07.0.py <input file> <output file> <text message or file>
+Usage: Secret_Messages.08.py <input file> <output file> <text message or file>
 """
 
 import sys
 from PIL import Image
+import data_bitstream
+import bitstream_data
 
-# global variables to support "nbit" functions
-nbit_data = None
-nbit_ch_index = None
-nbit_char = None
-nbit_index = None
-nbit_num_bits = None
-nbit_mask = None
-
-def nbits_init(data, num_bits):
-    """Initialize the "bit field" routines.
-
-    data      the string of data to form into bit values
-    num_bits  the number of bits to return each time
-              (must be a power of 2, ie, 1, 2, 4, or 8)
-    """
-
-    global bit_data, bit_ch_index, bit_char, bit_index, bit_num_bits, bit_mask
-
-    bit_data = bytes(data)      # the string to process
-    bit_ch_index = 0            # index in string of next character
-    bit_char = bit_data[0]      # the current character (as integer)
-    bit_index = 8               # index (from right) of next bit field (force next ch)
-    bit_num_bits = num_bits     # the number of bits to return
-    bit_mask = 2**num_bits - 1  # bit mask for rightmost N bits
-
-def nbits_get():
-    """Get the next N bits from the user data string.
-
-    Returns the next N bit field, or None if no data left.
-    """
-
-    global bit_ch_index, bit_char, bit_index
-
-
-    # move to next byte if we need to
-    if bit_index >= 8:
-        if bit_ch_index >= len(bit_data):       # if end of text
-            return None                         #   return None
-        bit_char = bit_data[bit_ch_index]       # else move to next byte
-        bit_ch_index += 1
-        bit_index = 0
-
-    # return next N bits
-    result = bit_char & bit_mask                # get low N bits from variable
-    bit_char = bit_char >> bit_num_bits         # shift variable to remove bits we are returning
-    bit_index += bit_num_bits                   # bump the bit counter
-    return result                               # return the result N bits
 
 def main(input_filename, output_filename, text):
     """Encode a text message in an image file.
@@ -85,7 +40,7 @@ def main(input_filename, output_filename, text):
         sys.exit(1)
 
     # prepare the text message "N bits at a time" software
-    nbits_init(text, 2)
+    data_bits = Bi(text, 2)
 
     # encode each N bits into the image pixel values
     new_pixels = []
