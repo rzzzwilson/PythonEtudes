@@ -2,7 +2,7 @@
 A generator function returning N bits at a time of a string.
 """
 
-def bit_stream(data, num_bits):
+def stream(data, num_bits):
         """Initialize the bit_stream() generator.
 
         data      the string to stream as N bits at a time
