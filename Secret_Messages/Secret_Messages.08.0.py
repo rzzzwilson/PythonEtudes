@@ -18,6 +18,16 @@ NumPixelColourValues = 4    # using 4 pixel values, RGBA
 BitsPerColour = 8           # 8 bits per colour value
 
 
+def stream_integer(int_value, num_bits):
+    """Stream a 4 byte integer value as 'num_bits' bit values."""
+
+    mask = 2**num_bits - 1         # bit mask for rightmost N bits
+
+    for _ in range(32 // num_bits):
+        result = int_value & mask  # get low N bits from variable
+        int_value >>= num_bits     # shift variable to remove bits we are returning
+        yield result               # return the result N bits
+
 def main(input_filename, output_filename, text):
     """Encode a text message in an image file.
 
@@ -57,15 +67,33 @@ def main(input_filename, output_filename, text):
     # prepare the image pixel value iterator
     image_pix = image_iterator.image_iterator(image, num_pixels)
 
-    # encode each N bits into the image pixel values
+    # encode the number of chars as a 4 byte integer value, N bits at a time
+    num_count_values = 32 // BitsPerPixelColour
+    num_mask = 2**BitsPerPixelColour - 1
+
+    # encode the number of text characters into the image
     new_pixels_list = []
     new_pix = []
+    int_stream = stream_integer(num_chars, BitsPerPixelColour)
+    for (pix, int_val) in zip(image_pix, int_stream):
+        print(f'int loop: pix={pix}, int_val={int_val}')
+        new_pix.append(pix ^ int_val)
+        if len(new_pix) == NumPixelColourValues:
+            new_pixels_list.append(tuple(new_pix))
+            new_pix = []
+    print(f'after integer, new_pixels_list={new_pixels_list}')
+    new_pix = []
+
+    # encode each message N bits into the image pixel values
     for (pix, nbits) in zip(image_pix, data_bits):
+        print(f'data loop: pix={pix}, nbits={nbits}')
         new_pix.append(pix ^ nbits)
         if len(new_pix) == NumPixelColourValues:
             new_pixels_list.append(tuple(new_pix))    # need to append a tuple
+            new_pix = []
 
     # update the image and write a new file
+    print(f'new_pixels_list={new_pixels_list}')
     image.putdata(new_pixels_list)
     image.save(output_filename)
 

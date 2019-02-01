@@ -16,7 +16,7 @@ class DecodeBits:
             raise ValueError(f"Bad value for 'num_bits', got {num_bits}, "
                               "expected one of 1, 2, 4 or 8.")
 
-        self.numn_bits = num_bits
+        self.num_bits = num_bits
         self._clear()
 
     def put(self, bits):
@@ -26,9 +26,9 @@ class DecodeBits:
         """
 
         self.accum += (bits << self.shift)
-        self.shift += self.numn_bits
+        self.shift += self.num_bits
         if self.shift >= 8:
-            self.result += chr(self.accum)
+            self.result.append(self.accum)
             self.accum = 0
             self.shift = 0
 
@@ -44,7 +44,7 @@ class DecodeBits:
 
         self.accum = 0
         self.shift = 0
-        self.result = ''
+        self.result = []
 
 if __name__ == '__main__':
     data = [1, 2, 0, 1, 0, 1, 3, 1,    # the 2bit-encoded message
