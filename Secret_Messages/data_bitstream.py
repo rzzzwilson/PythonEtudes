@@ -11,8 +11,6 @@ def stream(data, num_bits):
         Generates a stream of N bit values from the string.
         """
 
-        print(f"stream: data='{data}', num_bits={num_bits}")
-
         # check the number of bits to stream and create the bit mask
         if num_bits not in [1, 2, 4, 8]:
             raise ValueError(f"Bad value for 'num_bits', got {num_bits}, "
@@ -20,15 +18,13 @@ def stream(data, num_bits):
         mask = 2**num_bits - 1      # bit mask for rightmost N bits
 
         bit_data = bytes(data)
-        print(f'len(bit_data)={len(bit_data)}')
 
         for ch in bit_data:
             count = 0
-            while count < 8 // num_bits:
-                result = ch & mask  # get low N bits from variable
-                ch >>= num_bits     # shift variable to remove bits we are returning
-                count += num_bits   # bump the bit counter
-                yield result        # return the result N bits
+            while count < 8:
+                yield ch & mask         # yield low N bits from variable
+                ch = ch >> num_bits     # shift variable to remove bits we are returning
+                count += num_bits       # bump the bit counter
             
 
 if __name__ == '__main__':
