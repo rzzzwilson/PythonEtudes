@@ -16,6 +16,8 @@ def encode_string(data, num_bits):
     at a time.
     """
 
+    print(f"encode_string: data='{data}', num_bits={num_bits}")
+
     # we will actually send the bytestring form of the string
     # this makes handling of unicode easier
     byte_data = bytes(data, 'utf-8')
@@ -26,6 +28,7 @@ def encode_string(data, num_bits):
     for _ in range(8):
         yield i_data & 0b1
         i_data >>= 1
+    print(f'encode_string: num_bits={num_bits}')
 
     # now stream number of bytes in the 'byte_data' bytestring
     # send this as an integer of 2 bytes, 'num_bits' at a time
@@ -43,6 +46,7 @@ def encode_string(data, num_bits):
 
 def decode_data(data):
     """Decode a sequence of values that were encoded by 'bits_tostring'.
+    The values are the pixel colour values.
 
     data  the list of values to decode
     """
@@ -51,14 +55,16 @@ def decode_data(data):
     num_bits = 0
     shift = 0
     for v in data[:8]:
-        num_bits = num_bits | (v << shift)
+        num_bits |= (v & 0b1) << shift
         shift += 1
+    print(f'decode_data: num_bits={num_bits}')
 
     # now we get the byte count from the next 2*8/num_bits values
     num_bytes = 0
+    mask = 2**num_bits - 1
     shift = 0
     for v in data[8:8 + 2*8//num_bits]:
-        num_bytes |= v << shift
+        num_bytes |= (v & mask) << shift
         shift += num_bits
 
     # now collect the remaining values into a bytestring
@@ -67,7 +73,7 @@ def decode_data(data):
     byte_value = 0
     shift = 0
     for v in data[8 + 2*8//num_bits:]:
-        byte_value |= v << shift
+        byte_value |= (v & mask) << shift
         shift += num_bits
         if shift >= 8:
             byte_values.append(byte_value)
@@ -77,6 +83,7 @@ def decode_data(data):
                 break
 
     # now convert the list of byte values to a "unicode" string
+    print(f'byte_values={byte_values}')
     return bytes(byte_values).decode(encoding='utf_8')
 
 
