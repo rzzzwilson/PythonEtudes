@@ -9,8 +9,21 @@ encode(data, num_bits)
 decode(data)
     Decoding returns the original encoded string.
 
+encode_size(data, num_bits)
+    Returns the total number of Nbit values that result from the encoding.
+
 Handles Unicode characters.
 """
+
+def num_encode_values(data, num_bits):
+    """Returns the actual number of encoded values that would be used.
+
+    data      the text message to encode (as a bytetring)
+    num_bits  the number of bits to encode the message with
+    """
+
+    return 8 + len(data)*8//num_bits       # 8 bits in a byte
+
 
 def encode(data, num_bits):
     """Encode the given string as a stream of integer values.
@@ -41,6 +54,7 @@ def encode(data, num_bits):
         for _ in range(8 // num_bits):
             yield ch & mask
             ch >>= num_bits
+
 
 def decode(data):
     """Decode a sequence of values that were encoded by 'encode()'.
