@@ -13,8 +13,41 @@ decode(data)
 encode_size(data, num_bits)
     Returns the total number of Nbit values that result from the encoding.
 
+get_size_data(data)
+    Returns an iterator containing only the encoded bytes and the number of 
+    elements in the iterator: (count, iterator).
+
 Handles Unicode characters.
 """
+
+def get_size_data(data):
+    """Returns the number of Nbit values and an iterator containing the values.
+
+    data  an iterator
+
+    Returns (count, iterator) where "count" is the number of Nbit values
+    in the "iterator".
+    """
+
+    # first, accumulate the first 8 values as 1 bit values (ie, num_bits)
+    num_bits = 0
+    shift = 0
+    for _ in range(8):
+        v = next(data)
+        num_bits |= (v & 0b1) << shift
+        shift += 1
+
+    # next, get the number of bytes in the encoded data
+    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
+    num_nbits = 0
+    shift = 0
+    for _ in range(2 * 8 // num_bits):
+        v = next(data)
+        num_nbits |= v << shift
+        shift += num_bits
+
+    return (num_bits, num_nbits, data)
+
 
 def encode_size(data, num_bits):
     """Returns the actual number of encoded values that would be used.
@@ -40,7 +73,7 @@ def encode(data, num_bits):
 
     # we will actually send the bytestring form of the string
     # this makes handling of unicode easier
-    byte_data = bytes(data, 'utf-8')
+    bytes_data = bytes(data, 'utf-8')
 
     # we first stream the number of bits the following encoding uses
     # send a 1 byte integer value as 1 bit values
@@ -58,7 +91,7 @@ def encode(data, num_bits):
         num_nbits >>= num_bits
 
     # now stream the entire bytestring of data
-    for ch in byte_data:
+    for ch in bytes_data:
         for _ in range(8 // num_bits):
             yield ch & mask
             ch >>= num_bits
@@ -70,24 +103,10 @@ def decode(data):
     data  the list of values to decode
     """
 
-    # first, accumulate the first 8 values as 1 bit values (ie, num_bits)
-    num_bits = 0
-    shift = 0
-    for _ in range(8):
-        v = next(data)
-        num_bits |= (v & 0b1) << shift
-        shift += 1
-
-    # next, get the number of bytes in the encoded data
-    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
-    num_nbits = 0
-    shift = 0
-    for _ in range(2 * 8 // num_bits):
-        v = next(data)
-        num_nbits |= v << shift
-        shift += num_bits
+    (num_bits, num_nbits, data) = get_size_data(data)
 
     # now collect the remaining values into a bytestring
+    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
     byte_values = []
     byte_value = 0
     shift = 0
