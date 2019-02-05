@@ -4,6 +4,7 @@ Functions to encode/decode a string.
 encode(data, num_bits)
     Converts a string into a stream of N bit integers consisting of:
     o 8 1 bit values encoding the number of bits in the following encoding
+    o Nbit values for a 2 byte integer that holds the number of encoded values
     o N bit values holding encoded data
 
 decode(data)
@@ -22,7 +23,7 @@ def encode_size(data, num_bits):
     num_bits  the number of bits to encode the message with
     """
 
-    return 8 + len(data)*8//num_bits       # 8 bits in a byte
+    return 8 + 2*8//num_bits + len(data)*8//num_bits       # 8 bits in a byte
 
 
 def encode(data, num_bits):
@@ -48,8 +49,15 @@ def encode(data, num_bits):
         yield i_data & 0b1
         i_data >>= 1
 
+    # next we send a number of Nbit values that is a 2 byte integer
+    # that is the number of encoded values following
+    mask = 2**num_bits - 1          # get with rightmost N bits turned on
+    num_nbits = len(data)*8//num_bits
+    for _ in range(2 * 8 // num_bits):
+        yield num_nbits & mask
+        num_nbits >>= num_bits
+
     # now stream the entire bytestring of data
-    mask = 2**num_bits - 1          # get rightmost N bits turned on
     for ch in byte_data:
         for _ in range(8 // num_bits):
             yield ch & mask
@@ -70,10 +78,18 @@ def decode(data):
         num_bits |= (v & 0b1) << shift
         shift += 1
 
+    # next, get the number of bytes in the encoded data
+    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
+    num_nbits = 0
+    shift = 0
+    for _ in range(2 * 8 // num_bits):
+        v = next(data)
+        num_nbits |= v << shift
+        shift += num_bits
+
     # now collect the remaining values into a bytestring
     byte_values = []
     byte_value = 0
-    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
     shift = 0
     for v in data:
         byte_value |= (v & mask) << shift
