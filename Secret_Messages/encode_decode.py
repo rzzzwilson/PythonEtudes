@@ -4,7 +4,6 @@ Functions to encode/decode a string.
 encode(data, num_bits)
     Converts a string into a stream of N bit integers consisting of:
     o 8 1 bit values encoding the number of bits in the following encoding
-    o N bit values encoding a 2 byte integer holding the number of bytes encoded
     o N bit values holding encoded data
 
 decode(data)
@@ -22,8 +21,7 @@ def encode(data, num_bits):
     Yields N bit values that encode the given string.
 
     The first 8 1bit values are the number of bits in the following encoding.
-    The next 2*8/num_bits Nbit values are the number of characters in the byte string.
-    The final Nbit values are the original data string, in bytestring format, num_bits at a time.
+    The final Nbit values are the original data string, num_bits at a time.
     """
 
     # we will actually send the bytestring form of the string
@@ -37,15 +35,8 @@ def encode(data, num_bits):
         yield i_data & 0b1
         i_data >>= 1
 
-    # now stream number of bytes in the 'byte_data' bytestring
-    # send this as an integer of 2 bytes, 'num_bits' at a time
-    num_bytes = len(byte_data)
-    mask = 2**num_bits - 1          # get rightmost N bits turned on
-    for _ in range(2*8//num_bits):
-        yield num_bytes & mask
-        num_bytes >>= num_bits
-
     # now stream the entire bytestring of data
+    mask = 2**num_bits - 1          # get rightmost N bits turned on
     for ch in byte_data:
         for _ in range(8 // num_bits):
             yield ch & mask
@@ -65,18 +56,10 @@ def decode(data):
         num_bits |= (v & 0b1) << shift
         shift += 1
 
-    # now we get the byte count from the next 2*8/num_bits values (ie, num_bytes)
-    num_bytes = 0
-    mask = 2**num_bits - 1
-    shift = 0
-    for _ in range(2*8//num_bits):
-        v = next(data)
-        num_bytes |= (v & mask) << shift
-        shift += num_bits
-
     # now collect the remaining values into a bytestring
     byte_values = []
     byte_value = 0
+    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
     shift = 0
     for v in data:
         byte_value |= (v & mask) << shift
@@ -99,6 +82,10 @@ if __name__ == '__main__':
         sys.exit(1)
     number_of_bits = int(sys.argv[1])
     data = sys.argv[2]
+
+    if number_of_bits not in (1, 2, 4, 8):
+        msg = f"Expected <number of bits> to be 1, 2, 4 or 8, got '{number_of_bits}'."
+        raise ValueError(msg)
 
     print(f"  data='{data}'")
     encoded_data = encode(data, number_of_bits)
