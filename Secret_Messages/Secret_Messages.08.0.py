@@ -4,7 +4,7 @@ Secret_Messages.08.py
 Encode unicode text characters into an image file.
 This version uses iterators for text and image data.
 
-Usage: Secret_Messages.08.py <input file> <output file> <text message or file>
+Usage: Secret_Messages.08.py <input file> <output file> <number of bits> <text message or file>
 """
 
 import sys
@@ -12,20 +12,19 @@ from PIL import Image
 import image_iterator
 import encode_decode
 
-# default values
-BitsPerPixelColour = 2      # 2 bits per colour value
-NumPixelColourValues = 4    # using 4 pixel values, RGBA
-BitsPerColour = 8           # 8 bits per colour value
+# we assume that all pixels have four band values
+NumPixelColourValues = 4
 
 
-def main(input_filename, output_filename, text):
+def main(input_filename, output_filename, num_bits, text):
     """Encode a text message in an image file.
 
     input_filename   the name of the input image file
     output_filename  the name of the encoded putput image file
+    num_bits         the number of bits to encode the message with
     text             the text message to encode
 
-    The text data is encoded 'BitsPerPixelColour' bits at a time into each of
+    The text data is encoded 'num_bits' bits at a time into each of
     the pixel colour values.
     """
 
@@ -39,8 +38,8 @@ def main(input_filename, output_filename, text):
     byte_text = bytes(text, 'utf-8')
 
     # ensure the image is big enough to encode the message
-    num_encode_values = 8 + 8*4//BitsPerPixelColour + len(byte_text)*8//BitsPerPixelColour
-    if num_encode_values > num_pixels * NumPixelColourValues:
+    encode_size = encode_decode.encode_size(byte_text, num_bits)
+    if encode_size > num_pixels * NumPixelColourValues:
         print(f"Sorry, the image can't hold a message that long.")
         sys.exit(1)
 
@@ -48,31 +47,55 @@ def main(input_filename, output_filename, text):
     image_pix = image_iterator.image_iterator(image, num_pixels)
 
     # get the N bit stream of data to encode
-    data_stream = encode_decode.encode_string(text, BitsPerPixelColour)
+    data_stream = encode_decode.encode(text, num_bits)
 
     # encode each message into the image pixel values
     new_pixels_list = []
     new_pix = []
     for (pix, nbits) in zip(image_pix, data_stream):
-        print(f'nbits={nbits:0{BitsPerPixelColour}b}')
         new_pix.append(pix ^ nbits)
         if len(new_pix) == NumPixelColourValues:
             new_pixels_list.append(tuple(new_pix))    # need to append a tuple
             new_pix = []
 
+    # flush 'new_pix' if it has data
+    if new_pix:
+        # while 'new_pix' isn't full append original pix data
+        while len(new_pix) < NumPixelColourValues:
+            new_pix.append(next(image_pix))
+        new_pixels_list.append(tuple(new_pix))
+
     # update the image and write a new file
     image.putdata(new_pixels_list)
     image.save(output_filename)
 
+def usage(msg=None):
+    if msg:
+        print('8' * 60)
+        print(msg)
+        print('8' * 60)
+    print(__doc__)
+    print()
 
 # get the input and output filenames and the text message
-if len(sys.argv) != 4:
-    print(f'Sorry, expected two filenames and a text message')
+if len(sys.argv) != 5:
+    usage()
     sys.exit(1)
 
 input_filename = sys.argv[1]
 output_filename = sys.argv[2]
-text_msg = sys.argv[3]
+num_bits = sys.argv[3]
+text_msg = sys.argv[4]
+
+# check that 'num_bits' is a valid integer
+try:
+    num_bits = int(num_bits)
+except ValueError:
+    print(f"Sorry, 'num_bits' isn't a valid integer.")
+    sys.exit(1)
+if num_bits not in (1, 2, 4, 8):
+    print(f"Sorry, 'num_bits' must be 1, 2, 4 or 8.  Got '{num_bits}'")
+    sys.exit(1)
 
 # maybe 'text_msg' is actually a filename
 # try to open the file - if that works read the file contents
@@ -83,6 +106,6 @@ try:
 except FileNotFoundError:
     pass
 
-# call the encode routine
-main(input_filename, output_filename, text_msg)
+# call the image encode routine
+main(input_filename, output_filename, num_bits, text_msg)
 
