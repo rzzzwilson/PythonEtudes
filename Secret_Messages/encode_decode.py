@@ -15,7 +15,7 @@ encode_size(data, num_bits)
 Handles Unicode characters.
 """
 
-def num_encode_values(data, num_bits):
+def encode_size(data, num_bits):
     """Returns the actual number of encoded values that would be used.
 
     data      the text message to encode (as a bytetring)
