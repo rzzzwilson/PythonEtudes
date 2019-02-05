@@ -1,52 +1,56 @@
 """
-A generator function encoding a string into an iterator of N bit values.
+Functions to encode/decode a string.
+
+Converts a string into a stream of N bit integers consisting of:
+    o 8 1 bit values encoding the number of bits in the following encoding
+    o N bit values encoding a 2 byte integer holding the number of bytes encoded
+    o N bit values holding encoded data
+
+Decoding returns the original encoded string.
+
+Handles Unicode characters.
 """
 
-def encode_string(data, num_bits):
-    """Initialize the bit_stream() generator.
+def encode(data, num_bits):
+    """Encode the given string as a stream of integer values.
 
     data      the string to stream as N bits at a time
     num_bits  the number of bits to stream (1, 2, 4 or 8)
 
-    Streams N bit values that include encoding data plus the string.
+    Yields N bit values that encode the given string.
 
-    The first 8 values are the number of bits in the following encoding.
-    The next 2*8/num_bits values are the number of characters in the byte string
-    The final values are the original data string, in bytestring format, num_bits
-    at a time.
+    The first 8 1bit values are the number of bits in the following encoding.
+    The next 2*8/num_bits Nbit values are the number of characters in the byte string.
+    The final Nbit values are the original data string, in bytestring format, num_bits at a time.
     """
-
-    print(f"encode_string: data='{data}', num_bits={num_bits}")
 
     # we will actually send the bytestring form of the string
     # this makes handling of unicode easier
     byte_data = bytes(data, 'utf-8')
 
     # we first stream the number of bits the following encoding uses
-    # send this as 1 bit values, a 1 byte integer value
+    # send a 1 byte integer value as 1 bit values
     i_data = num_bits
     for _ in range(8):
         yield i_data & 0b1
         i_data >>= 1
-    print(f'encode_string: num_bits={num_bits}')
 
     # now stream number of bytes in the 'byte_data' bytestring
     # send this as an integer of 2 bytes, 'num_bits' at a time
     num_bytes = len(byte_data)
-    mask = 2**num_bits - 1
+    mask = 2**num_bits - 1          # get rightmost N bits turned on
     for _ in range(2*8//num_bits):
         yield num_bytes & mask
         num_bytes >>= num_bits
 
     # now stream the entire bytestring of data
     for ch in byte_data:
-        for _ in range(8//num_bits):
+        for _ in range(8 // num_bits):
             yield ch & mask
             ch >>= num_bits
 
-def decode_data(data):
-    """Decode a sequence of values that were encoded by 'bits_tostring'.
-    The values are the pixel colour values.
+def decode(data):
+    """Decode a sequence of values that were encoded by 'encode()'.
 
     data  the list of values to decode
     """
@@ -57,7 +61,7 @@ def decode_data(data):
     for v in data[:8]:
         num_bits |= (v & 0b1) << shift
         shift += 1
-    print(f'decode_data: num_bits={num_bits}')
+    print(f'decode: num_bits={num_bits}')
 
     # now we get the byte count from the next 2*8/num_bits values
     num_bytes = 0
@@ -97,10 +101,7 @@ if __name__ == '__main__':
     number_of_bits = int(sys.argv[1])
     data = sys.argv[2]
 
-    print(f'number_of_bits={number_of_bits}')
-
-    encoded_data = list(encode_string(data, number_of_bits))
-    print(f'len(encoded_data)={len(encoded_data)}')
-    result = decode_data(encoded_data)
+    encoded_data = list(encode(data, number_of_bits))
+    result = decode(encoded_data)
     print(f"result='{result}'")
 
