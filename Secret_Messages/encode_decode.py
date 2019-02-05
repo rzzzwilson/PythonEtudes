@@ -1,12 +1,14 @@
 """
 Functions to encode/decode a string.
 
-Converts a string into a stream of N bit integers consisting of:
+encode(data, num_bits)
+    Converts a string into a stream of N bit integers consisting of:
     o 8 1 bit values encoding the number of bits in the following encoding
     o N bit values encoding a 2 byte integer holding the number of bytes encoded
     o N bit values holding encoded data
 
-Decoding returns the original encoded string.
+decode(data)
+    Decoding returns the original encoded string.
 
 Handles Unicode characters.
 """
@@ -55,39 +57,36 @@ def decode(data):
     data  the list of values to decode
     """
 
-    # first, accumulate the first 8 values as 1 bits (num_bits)
+    # first, accumulate the first 8 values as 1 bit values (ie, num_bits)
     num_bits = 0
     shift = 0
-    for v in data[:8]:
+    for _ in range(8):
+        v = next(data)
         num_bits |= (v & 0b1) << shift
         shift += 1
-    print(f'decode: num_bits={num_bits}')
 
-    # now we get the byte count from the next 2*8/num_bits values
+    # now we get the byte count from the next 2*8/num_bits values (ie, num_bytes)
     num_bytes = 0
     mask = 2**num_bits - 1
     shift = 0
-    for v in data[8:8 + 2*8//num_bits]:
+    for _ in range(2*8//num_bits):
+        v = next(data)
         num_bytes |= (v & mask) << shift
         shift += num_bits
 
     # now collect the remaining values into a bytestring
-    num_values = num_bytes * 8//num_bits
     byte_values = []
     byte_value = 0
     shift = 0
-    for v in data[8 + 2*8//num_bits:]:
+    for v in data:
         byte_value |= (v & mask) << shift
         shift += num_bits
         if shift >= 8:
             byte_values.append(byte_value)
             byte_value = 0
             shift = 0
-            if len(byte_values) >= num_values:
-                break
 
     # now convert the list of byte values to a "unicode" string
-    print(f'byte_values={byte_values}')
     return bytes(byte_values).decode(encoding='utf_8')
 
 
@@ -101,7 +100,8 @@ if __name__ == '__main__':
     number_of_bits = int(sys.argv[1])
     data = sys.argv[2]
 
-    encoded_data = list(encode(data, number_of_bits))
+    print(f"  data='{data}'")
+    encoded_data = encode(data, number_of_bits)
     result = decode(encoded_data)
     print(f"result='{result}'")
 
