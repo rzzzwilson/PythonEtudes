@@ -110,6 +110,7 @@ def decode(data):
     byte_values = []
     byte_value = 0
     shift = 0
+    count = 0
     for v in data:
         byte_value |= (v & mask) << shift
         shift += num_bits
@@ -117,6 +118,9 @@ def decode(data):
             byte_values.append(byte_value)
             byte_value = 0
             shift = 0
+        count += 1
+        if count >= num_nbits:
+            break
 
     # now convert the list of byte values to a "unicode" string
     return bytes(byte_values).decode(encoding='utf_8')

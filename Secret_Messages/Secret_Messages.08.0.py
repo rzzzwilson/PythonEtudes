@@ -12,8 +12,8 @@ from PIL import Image
 import image_iterator
 import encode_decode
 
-# we assume that all pixels have four band values
-NumPixelColourValues = 4
+# we assume that all pixels have three band values
+NumPixelColourValues = 3
 
 
 def main(input_filename, output_filename, num_bits, text):
@@ -33,6 +33,9 @@ def main(input_filename, output_filename, num_bits, text):
     (image_width, image_height) = image.size
     num_pixels = image_width * image_height
     pixels = list(image.getdata())
+    if len(pixels[0]) != 3:
+        print(f'Sorry, image has {len(pixels[0])} bands, can only handle 3.')
+        sys.exit(1)
 
     # convert the text message in unicode to a sequence of bytes
     byte_text = bytes(text, 'utf-8')

@@ -2,9 +2,9 @@
 image_iterator.py
 
 Create an iterator that iterates through the pixels of an image returning
-individual red, green and blue pixel values.  Transparency values are
-passed through as a value, but is assumed to be 0xFF if not in the original
-image.
+individual red, green and blue pixel values.
+
+Cannot handle images with a transparency band.
 
 Usage: image_iterator.py <image file>
 """
@@ -25,17 +25,19 @@ def image_iterator(image, num_pixels=None):
         num_pixels = image_width * image_height
 
     for pix in image.getdata():
-        # get pixel colour values, assume a missing 'transparency' value is 255
-        try:
-            (r, g, b) = pix
-            a = 255
-        except ValueError:
-            (r, g, b, a) = pix
+#        # get pixel colour values, assume a missing 'transparency' value is 255
+#        try:
+#            (r, g, b) = pix
+#            a = 255
+#        except ValueError:
+#            (r, g, b, a) = pix
+
+        (r, g, b) = pix
 
         yield r
         yield g
         yield b
-        yield a
+#        yield a
 
         count += 1
         if count >= num_pixels:
