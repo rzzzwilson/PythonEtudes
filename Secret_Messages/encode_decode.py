@@ -25,8 +25,9 @@ def get_size_data(data):
 
     data  an iterator
 
-    Returns (count, iterator) where "count" is the number of Nbit values
-    in the "iterator".
+    Returns (num_bits, count) where "num_bits" is the number of bits in an
+    encoded value and "count" is the number of Nbit values remaining in the
+    "iterator".
     """
 
     # first, accumulate the first 8 values as 1 bit values (ie, num_bits)
@@ -46,7 +47,7 @@ def get_size_data(data):
         num_nbits |= v << shift
         shift += num_bits
 
-    return (num_bits, num_nbits, data)
+    return (num_bits, num_nbits)
 
 
 def encode_size(data, num_bits):
@@ -103,14 +104,14 @@ def decode(data):
     data  the list of values to decode
     """
 
-    (num_bits, num_nbits, data) = get_size_data(data)
+    (num_bits, num_nbits) = get_size_data(data)
 
     # now collect the remaining values into a bytestring
     mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
     byte_values = []
     byte_value = 0
     shift = 0
-    count = 0
+#    count = 0
     for v in data:
         byte_value |= (v & mask) << shift
         shift += num_bits
@@ -118,9 +119,9 @@ def decode(data):
             byte_values.append(byte_value)
             byte_value = 0
             shift = 0
-        count += 1
-        if count >= num_nbits:
-            break
+#        count += 1
+#        if count >= num_nbits:
+#            break
 
     # now convert the list of byte values to a "unicode" string
     return bytes(byte_values).decode(encoding='utf_8')
