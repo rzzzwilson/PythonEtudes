@@ -9,7 +9,7 @@ We will write two programs:
 * The "encoder" program will take an image file and a text message and produce
   a new image file containing the text.
 * The "decoder" program will take the original image file and the encoded image
-  filer and produce the original text.
+  file and produce the original text.
 
 This method of storing text messages in an image file without apparently
 changing the image is not really secret.  Programs exist that look for
@@ -18,7 +18,7 @@ non-random changes in the low-order bits of image pixel data.
 Along the way we will touch on various points:
 
 * converting text messages to/from N bit value streams
-* processing pixal data from image files
+* processing pixel data from image files
 * handling Unicode messages
 
 The etude starts

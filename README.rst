@@ -125,7 +125,7 @@ the text message.
 
 There are lots of lovely details here:
 
-* get N pixels at a time from a text message
+* get N bit values one at a time from a text message
 * convert a stream of N bit values back to a text message
 * get and modify pixel data from an image file
 
