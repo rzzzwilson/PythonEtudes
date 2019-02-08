@@ -22,14 +22,14 @@ def nbits_init(data, num_bits):
               (must be a power of 2, ie, 1, 2, 4, or 8)
     """
 
-    global bit_data, bit_ch_index, bit_char, bit_index, bit_num_bits, bit_mask
+    global nbit_data, nbit_ch_index, nbit_char, nbit_index, nbit_num_bits, nbit_mask
 
-    bit_data = str(data)        # the string to process
-    bit_ch_index = 0            # index in string of next character
-    bit_char = ord(bit_data[0]) # the current character (as integer)
-    bit_index = 8               # index (from right) of next bit field (force next ch)
-    bit_num_bits = num_bits     # the number of bits to return
-    bit_mask = 2**num_bits - 1  # bit mask for rightmost N bits
+    nbit_data = str(data)         # the string to process
+    nbit_ch_index = 0             # index in string of next character
+    nbit_char = ord(nbit_data[0]) # the current character (as integer)
+    nbit_index = 8                # index (from right) of next bit field (force next ch)
+    nbit_num_bits = num_bits      # the number of bits to return
+    nbit_mask = 2**num_bits - 1   # bit mask for rightmost N bits
 
 def nbits_get():
     """Get the next N bits from the user data string.
@@ -37,22 +37,21 @@ def nbits_get():
     Returns the next N bit field, or None if no data left.
     """
 
-    global bit_ch_index, bit_char, bit_index
+    global nbit_ch_index, nbit_char, nbit_index
 
-    
     # move to next character if we need to
-    if bit_index >= 8:
-        if bit_ch_index >= len(bit_data):       # if end of text
-            return None                         #   return None
-        bit_char = ord(bit_data[bit_ch_index])  # else move to next character
-        bit_ch_index += 1
-        bit_index = 0
+    if nbit_index >= 8:
+        if nbit_ch_index >= len(nbit_data):       # if end of text
+            return None                           #   return None
+        nbit_char = ord(nbit_data[nbit_ch_index]) # else move to next character
+        nbit_ch_index += 1
+        nbit_index = 0
 
     # return next N bits
-    result = bit_char & bit_mask                # get low N bits from variable
-    bit_char = bit_char >> bit_num_bits         # shift variable to remove bits we are returning
-    bit_index += bit_num_bits                   # bump the bit counter
-    return result                               # return the result N bits
+    result = nbit_char & nbit_mask                # get low N bits from variable
+    nbit_char = nbit_char >> nbit_num_bits        # shift variable to remove bits we are returning
+    nbit_index += nbit_num_bits                   # bump the bit counter
+    return result                                 # return the result N bits
 
 if __name__ == '__main__':
     import sys
