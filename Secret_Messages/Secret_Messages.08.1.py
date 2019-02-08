@@ -23,7 +23,7 @@ def usage(msg=None):
     print(__doc__)
     print()
 
-def decode(original, encoded):
+def decoded_iterator(original, encoded):
     """Get an iterator of decoded values.
 
     original  iterator of original image pixel values
@@ -53,6 +53,6 @@ encoded_image = Image.open(encoded_filename)
 encoded_iterator = image_iterator.image_iterator(encoded_image)
 
 # get the decoded value iterator
-decoded_iterator = decode(original_iterator, encoded_iterator)
+decoded_iterator = decoded_iterator(original_iterator, encoded_iterator)
 result = encode_decode.decode(decoded_iterator)
 print(result)

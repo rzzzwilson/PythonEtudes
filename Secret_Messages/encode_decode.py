@@ -57,7 +57,7 @@ def encode_size(data, num_bits):
     num_bits  the number of bits to encode the message with
     """
 
-    return 8 + 2*8//num_bits + len(data)*8//num_bits       # 8 bits in a byte
+    return 8 + 2*8//num_bits + len(bytes(data, 'utf-8'))*8//num_bits       # 8 bits in a byte
 
 
 def encode(data, num_bits):
@@ -86,7 +86,7 @@ def encode(data, num_bits):
     # next we send a number of Nbit values that is a 2 byte integer
     # that is the number of encoded values following
     mask = 2**num_bits - 1          # get with rightmost N bits turned on
-    num_nbits = len(data)*8//num_bits
+    num_nbits = len(bytes_data) * 8//num_bits
     for _ in range(2 * 8 // num_bits):
         yield num_nbits & mask
         num_nbits >>= num_bits
@@ -111,7 +111,7 @@ def decode(data):
     byte_values = []
     byte_value = 0
     shift = 0
-#    count = 0
+    count = 0
     for v in data:
         byte_value |= (v & mask) << shift
         shift += num_bits
@@ -119,9 +119,9 @@ def decode(data):
             byte_values.append(byte_value)
             byte_value = 0
             shift = 0
-#        count += 1
-#        if count >= num_nbits:
-#            break
+        count += 1
+        if count >= num_nbits:
+            break
 
     # now convert the list of byte values to a "unicode" string
     return bytes(byte_values).decode(encoding='utf_8')

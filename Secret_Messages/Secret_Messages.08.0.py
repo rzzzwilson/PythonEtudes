@@ -37,11 +37,8 @@ def main(input_filename, output_filename, num_bits, text):
         print(f'Sorry, image has {len(pixels[0])} bands, can only handle 3.')
         sys.exit(1)
 
-    # convert the text message in unicode to a sequence of bytes
-    byte_text = bytes(text, 'utf-8')
-
     # ensure the image is big enough to encode the message
-    encode_size = encode_decode.encode_size(byte_text, num_bits)
+    encode_size = encode_decode.encode_size(text, num_bits)
     if encode_size > num_pixels * NumPixelColourValues:
         print(f"Sorry, the image can't hold a message that long.")
         sys.exit(1)
