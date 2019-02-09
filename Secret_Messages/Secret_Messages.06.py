@@ -69,16 +69,13 @@ encoded_pixels = list(encoded_image.getdata())
 # decode the text message
 bits_init_tostring(2)
 for (o_pix, e_pix) in zip(original_pixels, encoded_pixels):
-    # handle any fourth pixel data value
-    if len(o_pix) == 3:
-        (o_r, o_g, o_b) = o_pix
-    if len(o_pix) == 4:
-        (o_r, o_g, o_b, _) = o_pix
+    # unpack each pixel tuple, check length
+    if len(o_pix) == 4 or len(e_pix) == 4:
+        print(f'Sorry, can only handle images with 3 colour values per pixel.')
+        sys.exit(1)
 
-    if len(e_pix) == 3:
-        (e_r, e_g, e_b) = e_pix
-    if len(e_pix) == 4:
-        (e_r, e_g, e_b, _) = e_pix
+    (o_r, o_g, o_b) = o_pix
+    (e_r, e_g, e_b) = e_pix
 
     # decode the three pixel values
     bits_r = o_r ^ e_r
