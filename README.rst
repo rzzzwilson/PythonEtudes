@@ -1,11 +1,19 @@
 +------------------------------------------------------------------------------+
 | Table of Contents                                                            |
 +==============================+===============================================+
-| `Overview`_                  | what is this all about?                       |
+| `Overview`_                  | What is this all about?                       |
 +------------------------------+-----------------------------------------------+
-| `From CLI to GUI`_           | adding two numbers together                   |
+| `From CLI to GUI`_           | Adding two numbers together                   |
 +------------------------------+-----------------------------------------------+
 | `Expression Recognizer`_     | Recognize simple expressions                  |
++------------------------------+-----------------------------------------------+
+| `Hangman`_                   | Play the game of Hangman                      |
++------------------------------+-----------------------------------------------+
+| `Two jugs problem`_          | Solve the "two jugs" problem                  |
++------------------------------+-----------------------------------------------+
+| `Command line menus`_        | Menus for the command line                    |
++------------------------------+-----------------------------------------------+
+| `Text Adventure`_            | Write a simple text adventure                 |
 +------------------------------+-----------------------------------------------+
 | `Secret Messages`_           | Encode a message in an image                  |
 +------------------------------+-----------------------------------------------+
@@ -136,4 +144,17 @@ The etude starts
 `here <https://github.com/rzzzwilson/PythonEtudes/wiki/Secret_Messages.00>`_.
 The code is
 `here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Secret_Messages>`_.
+
+Battleship
+==========
+
+Not yet written.
+
+Implement the `Battleship <https://en.wikipedia.org/wiki/Battleship_(game)>`_
+game:
+
+* Commandline version
+* GUI version
+* Play across the LAN
+
 
