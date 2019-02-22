@@ -1,10 +1,10 @@
 """
-Secret_Messages.08.1.py
+Secret_Messages.10.1.py
 
 Decode a secret message given the original and encoded image files.
 Uses stream data handling.
 
-Usage: Secret_Messages.08.1.py <original image file> <encoded image file>
+Usage: Secret_Messages.10.1.py <original image file> <encoded image file>
 """
 
 import sys

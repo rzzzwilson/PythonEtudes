@@ -1,10 +1,10 @@
 """
-Secret_Messages.08.py
+Secret_Messages.10.0.py
 
 Encode unicode text characters into an image file.
 This version uses iterators for text and image data.
 
-Usage: Secret_Messages.08.py <input file> <output file> <number of bits> <text message or file>
+Usage: Secret_Messages.10.0.py <input file> <output file> <number of bits> <text message or file>
 """
 
 import sys
