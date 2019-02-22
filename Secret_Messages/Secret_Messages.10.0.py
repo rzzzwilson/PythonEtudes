@@ -44,7 +44,7 @@ def main(input_filename, output_filename, num_bits, text):
         sys.exit(1)
 
     # prepare the image pixel value iterator
-    image_pix = image_iterator.image_iterator(image, num_pixels)
+    image_pix = image_iterator.image_iterator(image)
 
     # get the N bit stream of data to encode
     data_stream = encode_decode.encode(text, num_bits)
