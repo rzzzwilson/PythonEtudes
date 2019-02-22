@@ -33,8 +33,8 @@ def main(input_filename, output_filename, num_bits, text):
     (image_width, image_height) = image.size
     num_pixels = image_width * image_height
     pixels = list(image.getdata())
-    if len(pixels[0]) != 3:
-        print(f'Sorry, image has {len(pixels[0])} bands, can only handle 3.')
+    if len(pixels[0]) != NumPixelColourValues:
+        print(f'Sorry, image has {len(pixels[0])} bands, can only handle {NumPixelColourValues}.')
         sys.exit(1)
 
     # ensure the image is big enough to encode the message
@@ -49,7 +49,7 @@ def main(input_filename, output_filename, num_bits, text):
     # get the N bit stream of data to encode
     data_stream = encode_decode.encode(text, num_bits)
 
-    # encode each message into the image pixel values
+    # encode the message into the image pixel values
     new_pixels_list = []
     new_pix = []
     for (pix, nbits) in zip(image_pix, data_stream):

@@ -3,9 +3,9 @@ Functions to encode/decode a string.
 
 encode(data, num_bits)
     Converts a string into a stream of N bit integers consisting of:
-    o 8 1 bit values encoding the number of bits in the following encoding
+    o 4 1 bit values encoding the number of bits in the following encoding
     o Nbit values for a 2 byte integer that holds the number of encoded values
-    o N bit values holding encoded data
+    o Nbit values holding encoded data
 
 decode(data)
     Decoding returns the original encoded string.
@@ -13,48 +13,17 @@ decode(data)
 encode_size(data, num_bits)
     Returns the total number of Nbit values that result from the encoding.
 
-get_size_data(data)
-    Returns an iterator containing only the encoded bytes and the number of 
-    elements in the iterator: (count, iterator).
-
 Handles Unicode characters.
 """
-
-def get_size_data(data):
-    """Returns the number of Nbit values and an iterator containing the values.
-
-    data  an iterator
-
-    Returns (num_bits, count) where "num_bits" is the number of bits in an
-    encoded value and "count" is the number of Nbit values remaining in the
-    "iterator".
-    """
-
-    # first, accumulate the first 8 values as 1 bit values (ie, num_bits)
-    num_bits = 0
-    shift = 0
-    for _ in range(8):
-        v = next(data)
-        num_bits |= (v & 0b1) << shift
-        shift += 1
-
-    # next, get the number of bytes in the encoded data
-    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
-    num_nbits = 0
-    shift = 0
-    for _ in range(2 * 8 // num_bits):
-        v = next(data)
-        num_nbits |= v << shift
-        shift += num_bits
-
-    return (num_bits, num_nbits)
-
 
 def encode_size(data, num_bits):
     """Returns the actual number of encoded values that would be used.
 
-    data      the text message to encode (as a bytetring)
+    data      the text message to encode (as a unicode string)
     num_bits  the number of bits to encode the message with
+
+    Used by the encode function to check if the size of the encoded data
+    will fit into the target image file.
     """
 
     return 8 + 2*8//num_bits + len(bytes(data, 'utf-8'))*8//num_bits       # 8 bits in a byte
@@ -63,12 +32,12 @@ def encode_size(data, num_bits):
 def encode(data, num_bits):
     """Encode the given string as a stream of integer values.
 
-    data      the string to stream as N bits at a time
+    data      the unicode string to stream as N bits at a time
     num_bits  the number of bits to stream (1, 2, 4 or 8)
 
     Yields N bit values that encode the given string.
 
-    The first 8 1bit values are the number of bits in the following encoding.
+    The first 4 1bit values are the number of bits in the following encoding.
     The final Nbit values are the original data string, num_bits at a time.
     """
 
@@ -79,7 +48,7 @@ def encode(data, num_bits):
     # we first stream the number of bits the following encoding uses
     # send a 1 byte integer value as 1 bit values
     i_data = num_bits
-    for _ in range(8):
+    for _ in range(4):
         yield i_data & 0b1
         i_data >>= 1
 
@@ -101,13 +70,27 @@ def encode(data, num_bits):
 def decode(data):
     """Decode a sequence of values that were encoded by 'encode()'.
 
-    data  the list of values to decode
+    data  the sequence of values to decode
     """
 
-    (num_bits, num_nbits) = get_size_data(data)
+    # first, accumulate the first 4 values as 1 bit values (ie, num_bits)
+    num_bits = 0
+    shift = 0
+    for _ in range(4):
+        v = next(data)
+        num_bits |= (v & 0b1) << shift
+        shift += 1
+
+    # next, get the number of bytes in the encoded data
+    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
+    num_nbits = 0
+    shift = 0
+    for _ in range(2 * 8 // num_bits):
+        v = next(data)
+        num_nbits |= v << shift
+        shift += num_bits
 
     # now collect the remaining values into a bytestring
-    mask = 2**num_bits - 1      # bitmask, rightmost 'num_bits' bits turned on
     byte_values = []
     byte_value = 0
     shift = 0
