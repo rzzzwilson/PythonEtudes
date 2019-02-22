@@ -88,11 +88,7 @@ def main(input_filename, output_filename, text):
     new_pixels = []
     for pix in pixels:
         # get pixel colour values, handle a fourth value
-        if len(pix) == 3:
-            (r, g, b) = pix
-            a = 255
-        if len(pix) == 4:
-            (r, g, b, a) = pix
+        (r, g, b) = pix
 
         nbits = nbits_get()     # get N bits
         if nbits is None:       # if None
@@ -109,7 +105,7 @@ def main(input_filename, output_filename, text):
             nbits = 0
         xor_b = b ^ nbits
 
-        new_pixels.append((xor_r, xor_g, xor_b, a))    # need to append a tuple
+        new_pixels.append((xor_r, xor_g, xor_b))    # need to append a tuple
 
     # update the image and write a new file
     image.putdata(new_pixels)

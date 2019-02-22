@@ -24,10 +24,10 @@ def nbits_init(data, num_bits):
 
     global nbit_data, nbit_ch_index, nbit_char, nbit_index, nbit_num_bits, nbit_mask
 
-    nbit_data = str(data)         # the string to process
+    nbit_data = data              # the string to process
     nbit_ch_index = 0             # index in string of next character
-    nbit_char = ord(nbit_data[0]) # the current character (as integer)
-    nbit_index = 8                # index (from right) of next bit field (force next ch)
+    nbit_char = 0                 # the current character (as integer)
+    nbit_index = 8                # index (from right) of next bit field
     nbit_num_bits = num_bits      # the number of bits to return
     nbit_mask = 2**num_bits - 1   # bit mask for rightmost N bits
 
