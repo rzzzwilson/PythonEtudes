@@ -5,53 +5,26 @@ Code to return N bit values given a text string.
 
 Usage: Secret_Messages.02.py <number of bits> <text message>
 """
-   
-# global variables to support "nbit" functions
-nbit_data = None
-nbit_ch_index = None
-nbit_char = None
-nbit_index = None
-nbit_num_bits = None
-nbit_mask = None
 
-def nbits_init(data, num_bits):
-    """Initialize the "bit field" routines.
+def string_to_nbits(data, num_bits):
+    """Convert a sequence of 8 bit characters into a list of N bit values.
 
-    data      the string of data to form into bit values
-    num_bits  the number of bits to return each time
-              (must be a power of 2, ie, 1, 2, 4, or 8)
+    data      a sequence of 8 bit characters
+    num_bits  the number of bits in the N bit values
+
+    Returns a list of the N bit values.
     """
 
-    global nbit_data, nbit_ch_index, nbit_char, nbit_index, nbit_num_bits, nbit_mask
+    result = []
 
-    nbit_data = data              # the string to process
-    nbit_ch_index = 0             # index in string of next character
-    nbit_char = 0                 # the current character (as integer)
-    nbit_index = 8                # index (from right) of next bit field
-    nbit_num_bits = num_bits      # the number of bits to return
-    nbit_mask = 2**num_bits - 1   # bit mask for rightmost N bits
+    nbit_mask = 2**num_bits - 1                 # get a "bit mask" with N 1s at the right
+    for ch in data:
+        ch_value = ord(ch)                      # convert character to a decimal value
+        for _ in range(8 // num_bits):          # do 8 times for 1 bit, etc
+            result.append(ch_value & nbit_mask) # get low N bits from character value
+            ch_value >>= num_bits               # shift to remove low N bits
 
-def nbits_get():
-    """Get the next N bits from the user data string.
-
-    Returns the next N bit field, or None if no data left.
-    """
-
-    global nbit_ch_index, nbit_char, nbit_index
-
-    # move to next character if we need to
-    if nbit_index >= 8:
-        if nbit_ch_index >= len(nbit_data):       # if end of text
-            return None                           #   return None
-        nbit_char = ord(nbit_data[nbit_ch_index]) # else move to next character
-        nbit_ch_index += 1
-        nbit_index = 0
-
-    # return next N bits
-    result = nbit_char & nbit_mask                # get low N bits from variable
-    nbit_char = nbit_char >> nbit_num_bits        # shift variable to remove bits we are returning
-    nbit_index += nbit_num_bits                   # bump the bit counter
-    return result                                 # return the result N bits
+    return result
 
 if __name__ == '__main__':
     import sys
@@ -67,10 +40,7 @@ if __name__ == '__main__':
     print(f"data='{data}'")
     for ch in data:
         print(f'    {ord(ch):08b}')
-    nbits_init(data, number_of_bits)
-    while True:
-        bits = nbits_get()
-        if bits is None:
-            break
-        print(f'bits={bits:0{number_of_bits}b}')
+    nbits_list = string_to_nbits(data, number_of_bits)
+    for nbit_value in nbits_list:
+        print(f'nbit_value={nbit_value:0{number_of_bits}b}')
     

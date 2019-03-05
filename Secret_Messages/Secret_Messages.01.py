@@ -22,8 +22,8 @@ print(f'input_filename={input_filename}, output_filename={output_filename}, text
 
 # open input input_filename and get pixel data
 image = Image.open(input_filename)
-pixels = list(image.getdata())
-print(f'pixels={pixels}')
+pixels = image.getdata()
+print(f'pixels={list(pixels)}')
 
 # encode each text character into the image pixel RED values
 new_pixels = []
