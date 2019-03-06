@@ -21,8 +21,8 @@ def string_to_nbits(data, num_bits):
     for ch in data:
         ch_value = ord(ch)                      # convert character to a decimal value
         for _ in range(8 // num_bits):          # do 8 times for 1 bit, etc
-            result.append(ch_value & nbit_mask) # get low N bits from character value
-            ch_value >>= num_bits               # shift to remove low N bits
+            result.append(ch_value & nbit_mask) # get right N bits from character value
+            ch_value >>= num_bits               # shift to remove right N bits
 
     return result
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     print(f'number_of_bits={number_of_bits}')
     print(f"data='{data}'")
     for ch in data:
-        print(f'    {ord(ch):08b}')
+        print(f"    {ord(ch):08b} = '{ch}'")
     nbits_list = string_to_nbits(data, number_of_bits)
     for nbit_value in nbits_list:
         print(f'nbit_value={nbit_value:0{number_of_bits}b}')
