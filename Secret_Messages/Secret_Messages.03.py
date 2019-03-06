@@ -77,12 +77,12 @@ def main(input_filename, output_filename, text):
     new_pixels = []
     for (nbits, pix) in zip(nbit_tuples, pixels):
         # unpack nbit values and pixel colour values
-        (e_r, e_g, e_b) = nbits
-        (r, g, b) = pix
+        (nbit_r, nbit_g, nbit_b) = nbits
+        (pix_r, pix_g, pix_b) = pix
 
-        xor_r = r ^ e_r
-        xor_g = g ^ e_g
-        xor_b = b ^ e_g
+        xor_r = pix_r ^ nbit_r
+        xor_g = pix_g ^ nbit_g
+        xor_b = pix_b ^ nbit_g
 
         new_pixels.append((xor_r, xor_g, xor_b))    # need to append a tuple
 
