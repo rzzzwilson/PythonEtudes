@@ -9,56 +9,29 @@ Usage: Secret_Messages.03.py <input file> <output file> <text message>
 import sys
 from PIL import Image
 
-# global variables to support "nbit" functions
-nbit_data = None
-nbit_ch_index = None
-nbit_char = None
-nbit_index = None
-nbit_num_bits = None
-nbit_mask = None
 
-def nbits_init(data, num_bits):
-    """Initialize the "bit field" routines.
+def string_to_nbits(data, num_bits):
+    """Convert a sequence of 8 bit characters into a list of N bit values.
 
-    data      the string of data to form into bit values
-    num_bits  the number of bits to return each time
-              (must be a power of 2, ie, 1, 2, 4, or 8)
+    data      a sequence of 8 bit characters
+    num_bits  the number of bits in the N bit values
+
+    Returns a list of the N bit values.
     """
 
-    global bit_data, bit_ch_index, bit_char, bit_index, bit_num_bits, bit_mask
+    result = []
 
-    bit_data = str(data)        # the string to process
-    bit_ch_index = 0            # index in string of next character
-    bit_char = ord(bit_data[0]) # the current character (as integer)
-    bit_index = 8               # index (from right) of next bit field (force next ch)
-    bit_num_bits = num_bits     # the number of bits to return
-    bit_mask = 2**num_bits - 1  # bit mask for rightmost N bits
+    nbit_mask = 2**num_bits - 1                 # get a "bit mask" with N 1s at the right
+    for ch in data:
+        ch_value = ord(ch)                      # convert character to a decimal value
+        for _ in range(8 // num_bits):          # do 8 times for 1 bit, etc
+            result.append(ch_value & nbit_mask) # get right N bits from character value
+            ch_value >>= num_bits               # shift to remove right N bits
 
-def nbits_get():
-    """Get the next N bits from the user data string.
-
-    Returns the next N bit field, or None if no data left.
-    """
-
-    global bit_ch_index, bit_char, bit_index
-
-
-    # move to next character if we need to
-    if bit_index >= 8:
-        if bit_ch_index >= len(bit_data):       # if end of text
-            return None                         #   return None
-        bit_char = ord(bit_data[bit_ch_index])  # else move to next character
-        bit_ch_index += 1
-        bit_index = 0
-
-    # return next N bits
-    result = bit_char & bit_mask                # get low N bits from variable
-    bit_char = bit_char >> bit_num_bits         # shift variable to remove bits we are returning
-    bit_index += bit_num_bits                   # bump the bit counter
-    return result                               # return the result N bits
+    return result
 
 def main(input_filename, output_filename, text):
-    """Encode a text message in an image file.
+    """Encode a text message in all colours of an image file.
 
     input_filename   the name of the input image file
     output_filename  the name of the encoded putput image file
@@ -68,42 +41,48 @@ def main(input_filename, output_filename, text):
     colour values.
     """
 
+    num_bits = 2
+
     # open input input_filename and get pixel data
     image = Image.open(input_filename)
     (image_width, image_height) = image.size
     num_pixels = image_width * image_height
-    max_chars_in_image = num_pixels * 3 * 2 // 8
-    pixels = list(image.getdata())
+    max_chars_in_image = num_pixels * 3 * num_bits // 8
+    pixels = image.getdata()
 
     # ensure the text message isn't too long to be encoded in the image file
-    num_chars = len(text)           # assume 8-bit characters only in string
+    num_chars = len(text)
     if max_chars_in_image < num_chars:
         print(f'Sorry, the image can only contain {max_chars_in_image} characters')
         sys.exit(1)
 
-    # prepare the text message "N bits at a time" software
-    nbits_init(text, 2)
+    # get the text data into a "2 bits at a time" list
+    nbit_data = string_to_nbits(text, num_bits)
 
-    # encode each N bits into the image pixel values
+    # convert the flat list of Nbit data into a list of 3-tuples
+    temp = []           # place to store partial 3-tuple
+    nbit_tuples = []    # the list of 3-tuple Nbit text values
+    for val in nbit_data:
+        temp.append(val)                    # build temp list
+        if len(temp) == 3:                  # if we have 3 elements
+            nbit_tuples.append(tuple(temp)) # append tuple to result
+            temp = []                       # prepare for next 3
+    # handle partial "temp", if any
+    if len(temp) > 0:
+        while len(temp) < 3:
+            temp.append(0)
+        nbit_tuples.append(tuple(temp))
+
+    # encode text Nbit values into the image pixel values
     new_pixels = []
-    for pix in pixels:
-        # get pixel colour values
+    for (nbits, pix) in zip(nbit_tuples, pixels):
+        # unpack nbit values and pixel colour values
+        (e_r, e_g, e_b) = nbits
         (r, g, b) = pix
 
-        nbits = nbits_get()     # get N bits
-        if nbits is None:       # if None
-            nbits = 0           #     encode a 0 value (no change on XOR)
-        xor_r = r ^ nbits
-
-        nbits = nbits_get()
-        if nbits is None:
-            nbits = 0
-        xor_g = g ^ nbits
-
-        nbits = nbits_get()
-        if nbits is None:
-            nbits = 0
-        xor_b = b ^ nbits
+        xor_r = r ^ e_r
+        xor_g = g ^ e_g
+        xor_b = b ^ e_g
 
         new_pixels.append((xor_r, xor_g, xor_b))    # need to append a tuple
 
