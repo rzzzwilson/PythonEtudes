@@ -23,7 +23,7 @@ def nbits_to_string(data, num_bits):
     for bits in data:
         accum += bits << shift    # shift bit value left
         shift += num_bits         # shift next value "num_bits" places
-        if shift >= 8:            # if we have 8 bits
+        if shift >= 8:            # if we have accumulated 8 bits
             result += chr(accum)  # put new character into result
             accum = 0             # initialize ready for next character
             shift = 0
