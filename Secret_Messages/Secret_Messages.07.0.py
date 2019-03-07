@@ -3,75 +3,45 @@ Secret_Messages.07.0.py
 
 Encode unicode text characters into an image file.
 
-Usage: Secret_Messages.07.0.py <input file> <output file> <text message or file>
+Usage: Secret_Messages.07.0.py <input file> <output file> <number of bits> <text message or file>
 """
 
 import sys
 from PIL import Image
 
-# global variables to support "nbit" functions
-nbit_data = None
-nbit_ch_index = None
-nbit_char = None
-nbit_index = None
-nbit_num_bits = None
-nbit_mask = None
+def string_to_nbits(data, num_bits):
+    """Convert a sequence of 8 bit characters into a list of N bit values.
 
-def nbits_init(data, num_bits):
-    """Initialize the "bit field" routines.
+    data      a sequence of 8 bit characters
+    num_bits  the number of bits in the N bit values
 
-    data      the string of data to form into bit values
-    num_bits  the number of bits to return each time
-              (must be a power of 2, ie, 1, 2, 4, or 8)
+    Returns a list of the N bit values.
     """
 
-    global nbit_data, nbit_ch_index, nbit_char, nbit_index, nbit_num_bits, nbit_mask
+    result = []
 
-    nbit_data = bytes(data)      # the string to process
-    nbit_ch_index = 0            # index in string of next character
-    nbit_char = nbit_data[0]     # the current character (as integer)
-    nbit_index = 8               # index (from right) of next bit field (force next ch)
-    nbit_num_bits = num_bits     # the number of bits to return
-    nbit_mask = 2**num_bits - 1  # bit mask for rightmost N bits
+    nbit_mask = 2**num_bits - 1             # get a "bit mask" with N 1s at the right
+    for ch in data:
+        for _ in range(8 // num_bits):      # do 8 times for 1 bit, etc
+            result.append(ch & nbit_mask)   # get right N bits from character value
+            ch >>= num_bits                 # shift to remove right N bits
 
-def nbits_get():
-    """Get the next N bits from the user data string.
+    return result
 
-    Returns the next N bit field, or None if no data left.
-    """
-
-    global nbit_ch_index, nbit_char, nbit_index
-
-    # move to next byte if we need to
-    if nbit_index >= 8:
-        if nbit_ch_index >= len(nbit_data):     # if end of text
-            return None                         #   return None
-        nbit_char = nbit_data[nbit_ch_index]    # else move to next byte
-        nbit_ch_index += 1
-        nbit_index = 0
-
-    # return next N bits
-    result = nbit_char & nbit_mask              # get low N bits from variable
-    nbit_char = nbit_char >> nbit_num_bits      # shift variable to remove bits we are returning
-    nbit_index += nbit_num_bits                 # bump the bit counter
-    return result                               # return the result N bits
-
-def main(input_filename, output_filename, text):
+def main(input_filename, output_filename, num_bits, text):
     """Encode a text message in an image file.
 
     input_filename   the name of the input image file
     output_filename  the name of the encoded putput image file
+    num_bits         the number of bits to encode with
     text             the text message to encode
-
-    The text data is encoded 2 bits at a time into each of the three pixel
-    colour values.
     """
 
     # open input input_filename and get pixel data
     image = Image.open(input_filename)
     (image_width, image_height) = image.size
     num_pixels = image_width * image_height
-    max_chars_in_image = num_pixels * 3 * 2 // 8
+    max_chars_in_image = num_pixels * 3 * num_bits // 8
     pixels = list(image.getdata())
 
     # convert the text message in unicode to a sequence of bytes
@@ -83,33 +53,33 @@ def main(input_filename, output_filename, text):
         print(f'Sorry, the image can only contain {max_chars_in_image} characters')
         sys.exit(1)
 
-    # prepare the text message "N bits at a time" software
-    nbits_init(text, 2)
+    # get the text data into a "N bits at a time" list
+    nbit_data = string_to_nbits(text, num_bits)
 
-    # encode each N bits into the image pixel values
+    # convert the flat list of Nbit data into a list of 3-tuples
+    temp = []           # place to store partial 3-tuple
+    nbit_tuples = []    # the list of 3-tuple Nbit text values
+    for val in nbit_data:
+        temp.append(val)                    # build temp list
+        if len(temp) == 3:                  # if we have 3 elements
+            nbit_tuples.append(tuple(temp)) # append tuple to result
+            temp = []                       # prepare for next 3
+    # handle partial tuple, if any
+    if len(temp) > 0:
+        while len(temp) < 3:
+            temp.append(0)
+        nbit_tuples.append(tuple(temp))
+
+    # encode text Nbit values into the image pixel values
     new_pixels = []
-    for pix in pixels:
-        # get pixel colour values, abort if four values in pixel tuple
-        if len(pix) == 4:
-            print(f"Sorry, can't handle images with 4 values for a pizel.")
-            sys.exit(1)
+    for (nbits, pix) in zip(nbit_tuples, pixels):
+        # unpack nbit values and pixel colour values
+        (nbit_r, nbit_g, nbit_b) = nbits
+        (pix_r, pix_g, pix_b) = pix
 
-        (r, g, b) = pix
-
-        nbits = nbits_get()     # get N bits from text message
-        if nbits is None:       # if None
-            break               #     break out of encode, we're done
-        xor_r = r ^ nbits
-
-        nbits = nbits_get()
-        if nbits is None:
-            nbits = 0
-        xor_g = g ^ nbits
-
-        nbits = nbits_get()
-        if nbits is None:
-            nbits = 0
-        xor_b = b ^ nbits
+        xor_r = pix_r ^ nbit_r
+        xor_g = pix_g ^ nbit_g
+        xor_b = pix_b ^ nbit_b
 
         new_pixels.append((xor_r, xor_g, xor_b))    # need to append a tuple
 
@@ -119,13 +89,14 @@ def main(input_filename, output_filename, text):
 
 
 # get the input and output filenames and the text message
-if len(sys.argv) != 4:
-    print(f'Sorry, expected two filenames and a text message')
+if len(sys.argv) != 5:
+    print(f'Sorry, expected two filenames, number of bits and a text message')
     sys.exit(1)
 
 input_filename = sys.argv[1]
 output_filename = sys.argv[2]
-text_msg = sys.argv[3]
+num_bits = int(sys.argv[3])
+text_msg = sys.argv[4]
 
 # maybe 'text_msg' is actually a filename
 # try to open the file - if that works read the file contents
@@ -137,8 +108,9 @@ except FileNotFoundError:
     pass
 
 print(f'input_filename={input_filename}, output_filename={output_filename}')
+print(f'num_bits={num_bits}')
 print(f'text_msg:\n{text_msg}')
 
 # call the encode routine
-main(input_filename, output_filename, text_msg)
+main(input_filename, output_filename, num_bits, text_msg)
 
