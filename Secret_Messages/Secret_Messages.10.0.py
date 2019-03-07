@@ -12,9 +12,8 @@ from PIL import Image
 import image_iterator
 import encode_decode
 
-# we assume that all pixels have three band values
+# we assume that all pixels have three colour values
 NumPixelColourValues = 3
-
 
 def main(input_filename, output_filename, num_bits, text):
     """Encode a text message in an image file.
@@ -34,7 +33,7 @@ def main(input_filename, output_filename, num_bits, text):
     num_pixels = image_width * image_height
     pixels = list(image.getdata())
     if len(pixels[0]) != NumPixelColourValues:
-        print(f'Sorry, image has {len(pixels[0])} bands, can only handle {NumPixelColourValues}.')
+        print(f'Sorry, image has {len(pixels[0])} colour values, can only handle {NumPixelColourValues}.')
         sys.exit(1)
 
     # ensure the image is big enough to encode the message
@@ -47,12 +46,12 @@ def main(input_filename, output_filename, num_bits, text):
     image_pix = image_iterator.image_iterator(image)
 
     # get the N bit stream of data to encode
-    data_stream = encode_decode.encode(text, num_bits)
+    text_stream = encode_decode.encode(text, num_bits)
 
     # encode the message into the image pixel values
     new_pixels_list = []
     new_pix = []
-    for (pix, nbits) in zip(image_pix, data_stream):
+    for (pix, nbits) in zip(image_pix, text_stream):
         new_pix.append(pix ^ nbits)
         if len(new_pix) == NumPixelColourValues:
             new_pixels_list.append(tuple(new_pix))    # need to append a tuple
@@ -70,6 +69,8 @@ def main(input_filename, output_filename, num_bits, text):
     image.save(output_filename)
 
 def usage(msg=None):
+    """Print the module docstring along with an optional message."""
+
     if msg:
         print('8' * 60)
         print(msg)

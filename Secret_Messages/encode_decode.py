@@ -2,16 +2,16 @@
 Functions to encode/decode a string.
 
 encode(data, num_bits)
-    Converts a string into a stream of N bit integers consisting of:
+    Converts a string into a stream of Nbit integers consisting of:
     o 4 1 bit values encoding the number of bits in the following encoding
     o Nbit values for a 2 byte integer that holds the number of encoded values
     o Nbit values holding encoded data
 
 decode(data)
-    Decoding returns the original encoded string.
+    Converts an encoded sequence as returnd by encode() to the originl string.
 
 encode_size(data, num_bits)
-    Returns the total number of Nbit values that result from the encoding.
+    Returns the total number of Nbit values that result from encoding "data".
 
 Handles Unicode characters.
 """
@@ -22,8 +22,10 @@ def encode_size(data, num_bits):
     data      the text message to encode (as a unicode string)
     num_bits  the number of bits to encode the message with
 
-    Used by the encode function to check if the size of the encoded data
-    will fit into the target image file.
+    Returns the number of values in the sequence that is returned by the
+    encode() function.  We require this function because we can't get the
+    length of data produced by a generator function without destroying
+    the generator function state.
     """
 
     return 8 + 2*8//num_bits + len(bytes(data, 'utf-8'))*8//num_bits       # 8 bits in a byte
@@ -54,7 +56,7 @@ def encode(data, num_bits):
 
     # next we send a number of Nbit values that is a 2 byte integer
     # that is the number of encoded values following
-    mask = 2**num_bits - 1          # get with rightmost N bits turned on
+    mask = 2**num_bits - 1          # bit mask with rightmost N bits turned on
     num_nbits = len(bytes_data) * 8//num_bits
     for _ in range(2 * 8 // num_bits):
         yield num_nbits & mask
@@ -109,23 +111,33 @@ def decode(data):
     # now convert the list of byte values to a "unicode" string
     return bytes(byte_values).decode(encoding='utf_8')
 
-
+# Code to test the encode/decode functions.
 if __name__ == '__main__':
     import sys
 
-    # get test text and number of bits to return
-    if len(sys.argv) != 3:
-        print('Usage: xyzzy.py <number of bits> <text message>')
+    # get test text/filename
+    if len(sys.argv) != 2:
+        print('Usage: xyzzy.py <text message>')
         sys.exit(1)
-    number_of_bits = int(sys.argv[1])
-    data = sys.argv[2]
+    data = sys.argv[1]
 
-    if number_of_bits not in (1, 2, 4, 8):
-        msg = f"Expected <number of bits> to be 1, 2, 4 or 8, got '{number_of_bits}'."
-        raise ValueError(msg)
+    # get file contents if "data" is a filename
+    try:
+        data = open(data). read()
+    except FileNotFoundError:
+        pass
 
-    print(f"  data='{data}'")
-    encoded_data = encode(data, number_of_bits)
-    result = decode(encoded_data)
-    print(f"result='{result}'")
+    print(f"data=\n'{data}'")
 
+    error = False
+    for num_bits in (1, 2, 4, 8):
+        encoded_data = encode(data, num_bits)
+        result = decode(encoded_data)
+
+        if result != data:
+            error = True
+            print('Error!  num_bits={num_bits}, result=\n{result}')
+            print()
+
+    if not error:
+        print('All OK!')
