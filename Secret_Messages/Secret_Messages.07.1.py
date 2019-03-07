@@ -10,12 +10,12 @@ import sys
 from PIL import Image
 
 def nbits_to_string(data, num_bits):
-    """Convert a list of Nbit values to a python bytestring.
+    """Convert a list of Nbit values to a sequence of 8 bit values.
 
     data      the list of Nbit values
     num_bits  the number of bits in each value in "data"
 
-    Returns a simple python string.
+    Returns a simple python bytestring.
     """
 
     result = []
