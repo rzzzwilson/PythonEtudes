@@ -81,7 +81,7 @@ def main(input_filename, output_filename, num_bits, text):
 
         xor_r = pix_r ^ nbit_r
         xor_g = pix_g ^ nbit_g
-        xor_b = pix_b ^ nbit_g
+        xor_b = pix_b ^ nbit_b
 
         new_pixels.append((xor_r, xor_g, xor_b))    # need to append a tuple
 
