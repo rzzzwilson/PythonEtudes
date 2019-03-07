@@ -1,9 +1,9 @@
 """
-Secret_Messages.03.py
+Secret_Messages.04.py
 
 Encode text characters into an image file.
 
-Usage: Secret_Messages.03.py <input file> <output file> <text message>
+Usage: Secret_Messages.04.py <input file> <output file> <num bits> <text message>
 """
 
 import sys
@@ -30,25 +30,24 @@ def string_to_nbits(data, num_bits):
 
     return result
 
-def main(input_filename, output_filename, text):
+def main(input_filename, output_filename, num_bits, text):
     """Encode a text message in all colours of an image file.
 
     input_filename   the name of the input image file
     output_filename  the name of the encoded putput image file
+    num_bits         the number of bits to encode the message
     text             the text message to encode
 
-    The text data is encoded 2 bits at a time into each of the three pixel
-    colour values.
+    The text data is encoded "num_bits" bits at a time into each of the three
+    pixel colour values.
     """
-
-    num_bits = 2
 
     # open input input_filename and get pixel data
     image = Image.open(input_filename)
     (image_width, image_height) = image.size
     num_pixels = image_width * image_height
     max_chars_in_image = num_pixels * 3 * num_bits // 8
-    pixels = image.getdata()
+    pixels = list(image.getdata())
 
     # ensure the text message isn't too long to be encoded in the image file
     num_chars = len(text)
@@ -56,7 +55,7 @@ def main(input_filename, output_filename, text):
         print(f'Sorry, the image can only contain {max_chars_in_image} characters')
         sys.exit(1)
 
-    # get the text data into a "2 bits at a time" list
+    # get the text data into a "N bits at a time" list
     nbit_data = string_to_nbits(text, num_bits)
 
     # convert the flat list of Nbit data into a list of 3-tuples
@@ -67,7 +66,7 @@ def main(input_filename, output_filename, text):
         if len(temp) == 3:                  # if we have 3 elements
             nbit_tuples.append(tuple(temp)) # append tuple to result
             temp = []                       # prepare for next 3
-    # handle partial "temp", if any
+    # handle partial tuple, if any
     if len(temp) > 0:
         while len(temp) < 3:
             temp.append(0)
@@ -89,17 +88,17 @@ def main(input_filename, output_filename, text):
     # update the image and write a new file
     image.putdata(new_pixels)
     image.save(output_filename)
-    print(f'Saved to file {output_filename}')
 
 
-# get the input and output filenames and the text message
-if len(sys.argv) != 4:
-    print(f'Sorry, expected two filenames and a text message')
+# get the filenames, number of bits and the text message
+if len(sys.argv) != 5:
+    print(f'Sorry, expected two filenames, a number of bits and a text message')
     sys.exit(1)
 
 input_filename = sys.argv[1]
 output_filename = sys.argv[2]
-text_msg = sys.argv[3]
+num_bits = int(sys.argv[3])
+text_msg = sys.argv[4]
 
 # maybe 'text_msg' is actually a filename
 # try to open the file - if that works read the file contents
@@ -111,7 +110,8 @@ except FileNotFoundError:
     pass
 
 print(f'input_filename={input_filename}, output_filename={output_filename}')
+print(f'num_bits={num_bits}')
 print(f'text_msg:\n{text_msg}')
 
-main(input_filename, output_filename, text_msg)
+main(input_filename, output_filename, num_bits, text_msg)
 
