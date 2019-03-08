@@ -17,8 +17,6 @@
 +------------------------------+-----------------------------------------------+
 | `Secret Messages`_           | Encode a message in an image                  |
 +------------------------------+-----------------------------------------------+
-| `Play Battleship`_           | Implement the Battleship game, CLI & GUI      |
-+------------------------------+-----------------------------------------------+
 
 Welcome to the Python Etudes wiki!
 
@@ -146,17 +144,4 @@ The etude starts
 `here <https://github.com/rzzzwilson/PythonEtudes/wiki/Secret_Messages.00>`_.
 The code is
 `here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Secret_Messages>`_.
-
-Play Battleship
-===============
-
-Not yet written.
-
-Implement the `Battleship <https://en.wikipedia.org/wiki/Battleship_(game)>`_
-game:
-
-* Commandline version
-* GUI version
-* Play across the LAN
-
 
