@@ -12,3 +12,9 @@ The idea is to use UDP broadcast messages.  Each client will::
 Once an ACK message is received each copy of the code will return the IP of
 the peer.
 
+Executing::
+
+    python3 test.py
+
+will run the test code.  Run another instance on the same machine or another
+machine on the same subnet.
