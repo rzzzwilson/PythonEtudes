@@ -14,19 +14,12 @@ Some features:
 class Place:
     """A Place in the text adventure."""
 
-    def __init__(self, name, description, long_description=None,
-                 connections=None, things_here=None):
+    def __init__(self, name, description, long_description,
+                 connections):
         self.name = name
         self.description = description
-        if long_description is None:
-            long_description = description
         self.long_description = long_description
-        if connections is None:
-            connections = {}
         self.connections = connections
-        if things_here is None:
-            things_here = []
-        self.things_here = things_here
 
     def __str__(self):
         """For debug."""
