@@ -1,4 +1,19 @@
+"""
+This experimental code is trying to implement a simple text adventure.
+
+We just have static data structures describing places.  The player may
+move around with the usual commands.
+
+Some features:
+
+* "textual" linkages between Places to fix the "forward reference" problem
+* code to print short descriptions of a place if visited recently
+
+"""
+
 class Place:
+    """A Place in the text adventure."""
+
     def __init__(self, name, description, long_description=None,
                  connections=None, things_here=None):
         self.name = name
@@ -14,21 +29,28 @@ class Place:
         self.things_here = things_here
 
     def __str__(self):
+        """For debug."""
+
         return f"Place('{self.name}')"
 
+
+# the Places in this adventure
 white_house = Place('white_house', 'at the White house.',
                     'at the White house, a decaying white weatherboard house.  '
                     'There are paths to the east and south.',
                     connections = {'east': 'path',
                                    'south': 'forest'})
+
 path = Place('path', 'on a narrow path.',
              'on a narrow path.  The path runs east-west.',
              connections={'east': 'glade',
                           'west': 'white_house'})
+
 glade = Place('glade', 'in a shadowed glade.',
               'in a shadowed glade, with exits to the west and southwest.',
               connections = {'west': 'path',
                              'southwest': 'forest'})
+
 forest = Place('forest', 'in a dark difficult forest.',
                'in a dark difficult forest, with paths leading north and northeast.',
         connections={'northeast': 'glade',
@@ -36,6 +58,7 @@ forest = Place('forest', 'in a dark difficult forest.',
 
 # a dictionary to map place "names" to the actual Place() object
 # solves the "forward reference" problem
+# this definition must come AFTER all Places are defined
 name_place = {'white_house': white_house,
               'path': path,
               'glade': glade,
@@ -81,7 +104,7 @@ def get_move():
             return allowed_moves[move]
         print(f"Sorry, '{move}' isn't a legal move here.  Try again.\n")
 
-def allow_move(move):
+def make_move(move):
     """Check if the move is legal.  If so, move there.
 
     move  the canonical move string
@@ -105,5 +128,5 @@ def allow_move(move):
 describe_place(current_place)
 while True:
     move = get_move()
-    if not allow_move(move):
+    if not make_move(move):
         print("Sorry, that isn't a legal move here.  Try again.\n")
