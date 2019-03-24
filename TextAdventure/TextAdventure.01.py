@@ -99,11 +99,6 @@ def describe_place(place, look=False):
     look   if True, print long description
     """
 
-    print(f'describe_place: previous_places:')
-    for p in previous_places:
-        print(f'    {p}')
-    print(f'place={place}')
-
     if look or place not in previous_places[1:]:
         print('You are ' + place.long_description)
     else:
