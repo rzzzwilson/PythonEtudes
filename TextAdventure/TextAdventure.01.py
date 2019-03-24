@@ -87,10 +87,8 @@ def push_prev(place):
     Oldest entries are deleted to limit list to "num_previous" entries.
     """
 
-    global previous_places
-
     previous_places.insert(0, place)
-    previous_places = previous_places[:num_previous]
+    del previous_places[num_previous:]
 
 def describe_place(place, look=False):
     """Describe the current place.
