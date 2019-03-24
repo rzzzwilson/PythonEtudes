@@ -53,7 +53,7 @@ forest = Place('forest', 'in a dark difficult forest.',
 # dynamically populate the "name_place"
 # dictionary with unique Place identifying string mapping to the Place instance
 name_place = {}
-for obj_name in dict(locals()):
+for obj_name in locals().copy():     # must work on copy of locals() result
     obj = locals()[obj_name]
     if isinstance(obj, Place):
         name_place[obj_name] = obj
@@ -68,6 +68,7 @@ allowed_commands = {'north': 'north', 'n': 'north',
                  'west': 'west', 'w': 'west',
                  'northwest': 'northwest', 'nw': 'northwest',
                  'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
+                 'stop': 'quit', 'leave': 'quit',
                  'look': 'look', 'l': 'look',
                 }
 
