@@ -76,15 +76,35 @@ allowed_commands = {'north': 'north', 'n': 'north',
 current_place = white_house
 
 # the previous Place, used to implement the "short" description on revisit
-previous_place = None
+previous_places = []
+num_previous = 3    # the number of previous places to remember in "previous_places"
 
-def describe_place(place):
+def push_prev(place):
+    """Push a place onto the "previous_places" list.
+
+    place  the place to push
+
+    Oldest entries are deleted to limit list to "num_previous" entries.
+    """
+
+    global previous_places
+
+    previous_places.insert(0, place)
+    previous_places = previous_places[:num_previous]
+
+def describe_place(place, look=False):
     """Describe the current place.
     
     place  a reference to the Place() object to describe
+    look   if True, print long description
     """
 
-    if place != previous_place:
+    print(f'describe_place: previous_places:')
+    for p in previous_places:
+        print(f'    {p}')
+    print(f'place={place}')
+
+    if look or place not in previous_places[1:]:
         print('You are ' + place.long_description)
     else:
         print('You are ' + place.description)
@@ -115,24 +135,25 @@ def do_command(cmd):
     """
 
     global current_place
-    global previous_place
 
     if cmd in current_place.connections:
-        new_place = name_place[current_place.connections[cmd]]
-        (previous_place, current_place) = (current_place, new_place)
+        current_place = name_place[current_place.connections[cmd]]
+        push_prev(current_place)
         return True
 
     return False
 
 
 # play the game
+force_look = False
 while True:
-    describe_place(current_place)
+    describe_place(current_place, look=force_look)
+    force_look = False
     cmd = get_command()
     if cmd == 'quit':
         break
     if cmd == 'look':
-        previous_place = None
+        force_look = True
         continue
     if not do_command(cmd):
         print("Sorry, you can't do that.  Try again.\n")
