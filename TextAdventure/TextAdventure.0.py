@@ -3,12 +3,6 @@ This experimental code is trying to implement a simple text adventure.
 
 We just have static data structures describing places.  The player may
 move around with the usual commands.
-
-Some features:
-
-* "textual" linkages between Places to fix the "forward reference" problem
-* code to print short descriptions of a place if visited recently
-
 """
 
 class Place:
@@ -51,8 +45,7 @@ name_place = {'white_house': white_house,
               'forest': forest
              }
 
-current_place = white_house
-
+# map allowed input moves to "canonical" move strings
 allowed_moves = {'north': 'north', 'n': 'north',
                  'northeast': 'northeast', 'ne': 'northeast',
                  'east': 'east', 'e': 'east',
@@ -63,6 +56,9 @@ allowed_moves = {'north': 'north', 'n': 'north',
                  'northwest': 'northwest', 'nw': 'northwest',
                 }
 
+# the "current" place, ie, where the player is
+current_place = white_house
+
 def describe_place(place):
     """Describe the current place.
     
@@ -71,10 +67,10 @@ def describe_place(place):
 
     print('You are ' + place.description)
 
-def get_move():
+def get_command():
     """Get a legal move command.
    
-    Accepts any of the canonical moves even if it won't work
+    Accepts any of the allowed moves even if it won't work
     in the current Place.
 
     Returns the canonical direction string.
@@ -87,12 +83,12 @@ def get_move():
         except KeyError:
             print(f"Sorry, '{move}' isn't a legal move here.  Try again.\n")
 
-def make_move(move):
+def do_command(move):
     """Check if the move is legal in the current Place.  If so, move there.
 
     move  the canonical move string
 
-    Returns True if move OK and "current_place" is updated.
+    Returns True if move allowed.  "current_place" is updated.
     Returns False if move not allowed.
     """
 
@@ -101,12 +97,13 @@ def make_move(move):
     if move in current_place.connections:
         current_place = name_place[current_place.connections[move]]
         return True
+
     return False
 
 
 # play the game
 while True:
     describe_place(current_place)
-    move = get_move()
-    if not make_move(move):
+    move = get_command()
+    if not do_command(move):
         print("Sorry, you can't move in that direction.  Try again.\n")
