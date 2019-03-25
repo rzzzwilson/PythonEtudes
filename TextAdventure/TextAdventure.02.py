@@ -2,16 +2,14 @@
 This experimental code is trying to implement a simple text adventure.
 
 We just have static data structures describing places.  The player may
-move around with the usual commands.
+move around with the usual commands and pick up/drop objects.
 
-We change TextAdventure.0.py to have:
+We change TextAdventure.1.py to:
 
-* a nicer 'quit' command to stop playing
-* a 'look' command to redescribe the current Place
-* automatic population of the "name_place" dictionary mapping the unique
-  place identifier string to the Place instance
-* code that displays a place "long description" if we are new to the Place,
-  but displays a short description if we return to a Place we just left
+* have objects that may be picked up and dropped
+* allow Places to contain objects
+* create a Player object that has an inventory
+* add the "pickup" and "drop": commands, with aliases
 """
 
 class Place:
@@ -24,11 +22,39 @@ class Place:
         if long_description is None:
             long_description = description
         self.long_description = long_description
+        self.objects = []
 
     def __str__(self):
         """For debug."""
 
         return f"Place('{self.name}')"
+
+class Object:
+    """An object."""
+
+    def __init__(self, name, description, long_description=None):
+        self.name = name
+        self.description = description
+        if long_description is None:
+            long_description = description
+        self.long_description = long_description
+
+    def __str__(self):
+        """For debug."""
+
+        return f"Object('{self.name}')"
+
+class Player:
+    """An object to hold player information."""
+
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        """For debug."""
+
+        return f"Player('{self.name}')"
+
 
 # the Places in this adventure
 white_house = Place('white_house', 'at the White house.',
@@ -50,6 +76,14 @@ forest = Place('forest', 'in a dark difficult forest.',
                             'north': 'white_house'},
                long_description='in a dark difficult forest.  Narrow tracks go northeast and north.')
 
+# the objects in this adventure
+axe = Object('axe', 'a small Elvish axe',
+             long_description='a small Elvish axe.  There are faint unreadable engravings on the head.')
+
+# this dictionary maps an object to the Place it initially appears in
+object_places = {'axe': 'glade'}
+
+
 # dynamically populate the "name_place" dictionary with unique Place identifying
 # string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
@@ -61,6 +95,12 @@ for (obj_name, obj) in globals().copy().items():
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         name_place[name] = obj
+
+# code to place all objects in their initial position in the map
+for (name, place) in object_places.items():
+    object_ref = globals()[name]
+    place_ref = globals()[place]
+    place_ref.objects.append(name)
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
