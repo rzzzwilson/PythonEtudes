@@ -49,6 +49,7 @@ class Player:
 
     def __init__(self, name):
         self.name = name
+        self.inventory = []
 
     def __str__(self):
         """For debug."""
@@ -81,24 +82,27 @@ axe = Object('axe', 'a small Elvish axe',
              long_description='a small Elvish axe.  There are faint unreadable engravings on the head.')
 
 # this dictionary maps an object to the Place it initially appears in
-object_places = {'axe': 'glade'}
+object_initial_places = {'axe': 'glade'}
 
 
-# dynamically populate the "name_place" dictionary with unique Place identifying
+# dynamically populate the "place_name_ref" dictionary with unique Place identifying
 # string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
-name_place = {}
+place_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
-        if name in name_place:      # check unique name is unique
+        if name in place_name_ref:      # check unique name is unique
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
-        name_place[name] = obj
+        place_name_ref[name] = obj
 
 # code to place all objects in their initial position in the map
-for (name, place) in object_places.items():
+# we also need to populate the "object_name_ref" ditionary
+object_name_ref = {}
+for (name, place) in object_initial_places.items():
     object_ref = globals()[name]
+    object_name_ref[name] = object_ref
     place_ref = globals()[place]
     place_ref.objects.append(name)
 
@@ -146,6 +150,12 @@ def describe_place(place, look=False):
     else:
         print('You are ' + place.description)
 
+    # if there's something here, print its/their description
+    if place.objects:
+        print('\nYou see here:')
+        for obj_name in place.objects:
+            print(f'\t{object_name_ref[obj_name].description}')
+
 def get_command():
     """Get a legal command.
    
@@ -174,7 +184,7 @@ def do_command(cmd):
     global current_place
 
     if cmd in current_place.connections:
-        current_place = name_place[current_place.connections[cmd]]
+        current_place = place_name_ref[current_place.connections[cmd]]
         push_prev(current_place)
         return True
 
