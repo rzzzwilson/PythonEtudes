@@ -51,15 +51,16 @@ forest = Place('forest', 'in a dark difficult forest.',
                long_description='in a dark difficult forest.  Narrow tracks go northeast and north.')
 
 # dynamically populate the "name_place" dictionary with unique Place identifying
-# string mapping to the Place instance
+# string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
 name_place = {}
-for name, obj in globals().copy().items():
+for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
-        id_name = obj.name
-        if id_name in name_place:      # check unique name is unique
-            raise ValueError(f"ERROR: Place name '{id_name}' isn't unique!?")
-        name_place[id_name] = obj
+        name = obj.name
+        if name in name_place:      # check unique name is unique
+            msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
+            raise ValueError(msg)
+        name_place[name] = obj
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
@@ -80,7 +81,7 @@ current_place = white_house
 
 # the previous Place, used to implement the "short" description on revisit
 previous_places = []
-num_previous = 3    # the number of previous places to remember in "previous_places"
+num_previous = 4    # the number of previous places to remember in "previous_places"
 
 def push_prev(place):
     """Push a place onto the "previous_places" list.
@@ -99,6 +100,10 @@ def describe_place(place, look=False):
     place  a reference to the Place() object to describe
     look   if True, print long description
     """
+
+    print(f'previous_places[1:]=')
+    for p in previous_places[1:]:
+        print(p)
 
     if look or place not in previous_places[1:]:
         print('You are ' + place.long_description)
@@ -142,6 +147,7 @@ def do_command(cmd):
 
 # play the game
 force_look = False
+push_prev(current_place)    # start at the "current_place"
 while True:
     describe_place(current_place, look=force_look)
     force_look = False
