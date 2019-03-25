@@ -50,13 +50,16 @@ forest = Place('forest', 'in a dark difficult forest.',
                             'north': 'white_house'},
                long_description='in a dark difficult forest.  Narrow tracks go northeast and north.')
 
-# dynamically populate the "name_place"
-# dictionary with unique Place identifying string mapping to the Place instance
+# dynamically populate the "name_place" dictionary with unique Place identifying
+# string mapping to the Place instance
+# also check that unique name strings actually are UNIQUE!
 name_place = {}
-for obj_name in locals().copy():     # must work on copy of locals() result
-    obj = locals()[obj_name]
+for name, obj in globals().copy().items():
     if isinstance(obj, Place):
-        name_place[obj_name] = obj
+        id_name = obj.name
+        if id_name in name_place:      # check unique name is unique
+            raise ValueError(f"ERROR: Place name '{id_name}' isn't unique!?")
+        name_place[id_name] = obj
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
