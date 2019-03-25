@@ -108,7 +108,7 @@ develop CLI menus.
 Text Adventure
 ==============
 
-Not yet written.
+In progress.
 
 Inspired by the myriad cries for help on /r/learnpython (after getting shooed
 of at /r/python!) to fix bugs in a simple text adventure.  Must be an assignment
@@ -122,6 +122,11 @@ Various stages:
 * add monsters that can't move
 * allow monsters to move
 * discuss creating data and "data editors", "sanity" checker, etc
+
+The etude starts
+`here <https://github.com/rzzzwilson/PythonEtudes/wiki/TextAdventure.00>`_.
+The code is
+`here <https://github.com/rzzzwilson/PythonEtudes/tree/master/TextAdventure>`_.
 
 Secret Messages
 ===============
