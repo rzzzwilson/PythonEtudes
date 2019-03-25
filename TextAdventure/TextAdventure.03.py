@@ -4,10 +4,10 @@ This experimental code is trying to implement a simple text adventure.
 We just have static data structures describing places.  The player may
 move around with the usual commands and pick up/drop objects.
 
-We change TextAdventure.1.py to:
+We change TextAdventure.2.py to:
 
-* have objects that may be picked up and dropped
-* allow Places to contain objects
+* create a Player object that has an inventory
+* add the "pickup" and "drop": commands, with aliases
 """
 
 class Place:
