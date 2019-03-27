@@ -26,8 +26,12 @@ Overview
 This is a collection of short essays (etudes) on various subjects showing how
 some problem could be solved in python.  The approach is to start very simply
 and progress through various versions of a program, adding things like error
-checking, better code structure, etc, as we go.  Along the way we will
-demonstrate common errors often tripped over by beginners.
+checking, better code structure, etc, as we go.
+
+This is not a carefully planned exposition on writing code, but is more like
+what happens in real software development: decisions are made, code is written,
+problems found, code is redesigned/rewritten, and so on.  Each little piece
+(or two) of an etude covers one part of solving the problem.
 
 The code for the etudes is stored
 `here <https://github.com/rzzzwilson/PythonEtudes/>`_ and the explanatory notes
@@ -119,8 +123,8 @@ Various stages:
 * simple "walk around" adventure, discuss methods of storing data, discuss "forward reference" problem
 * add features like short descriptions if recently at a place
 * add objects that the player can pick up
-* add monsters that can't move
-* allow monsters to move
+* add monsters that can move
+* allow monsters to attack without first being attacked
 * discuss creating data and "data editors", "sanity" checker, etc
 
 The etude starts

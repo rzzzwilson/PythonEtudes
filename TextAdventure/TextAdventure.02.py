@@ -42,24 +42,13 @@ class Object:
 
         return f"Object('{self.name}')"
 
-class Player:
-    """An object to hold player information."""
-
-    def __init__(self, name):
-        self.name = name
-        self.inventory = []
-
-    def __str__(self):
-        """For debug."""
-
-        return f"Player('{self.name}')"
-
 
 # the Places in this adventure
 white_house = Place('white_house', 'at the White house.',
                     connections={'east': 'path',
                                  'south': 'forest'},
-                    long_description='at the White house. Paths lead south and east from here.')
+                    long_description=('at the White house. '
+                                      'Paths lead south and east from here.'))
 
 path = Place('path', 'on a narrow path.',
              connections={'east': 'glade',
@@ -68,23 +57,26 @@ path = Place('path', 'on a narrow path.',
 glade = Place('glade', 'in a shadowed glade.',
               connections={'west': 'path',
                            'southwest': 'forest'},
-              long_description='in a shadowed glade, with paths to the west and southwest.')
+              long_description=('in a shadowed glade, '
+                                'with paths to the west and southwest.'))
 
 forest = Place('forest', 'in a dark difficult forest.',
                connections={'northeast': 'glade',
                             'north': 'white_house'},
-               long_description='in a dark difficult forest.  Narrow tracks go northeast and north.')
+               long_description=('in a dark difficult forest. '
+                                 'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
 axe = Object('axe', 'a small Elvish axe',
-             long_description='a small Elvish axe.  There are faint unreadable engravings on the head.')
+             long_description=('a small Elvish axe. '
+                               'There are faint unreadable engravings on the head.'))
 
 # this dictionary maps an object to the Place it initially appears in
 object_initial_places = {'axe': 'glade'}
 
 
-# dynamically populate the "place_name_ref" dictionary with unique Place identifying
-# string mapping to the Place instance.
+# dynamically populate the "place_name_ref" dictionary with unique Place
+# identifying string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
 place_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
@@ -106,17 +98,17 @@ for (name, place) in object_initial_places.items():
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
-                 'northeast': 'northeast', 'ne': 'northeast',
-                 'east': 'east', 'e': 'east',
-                 'southeast': 'southeast', 'se': 'southeast',
-                 'south': 'south', 's': 'south',
-                 'southwest': 'southwest', 'sw': 'southwest',
-                 'west': 'west', 'w': 'west',
-                 'northwest': 'northwest', 'nw': 'northwest',
-                 'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
-                 'stop': 'quit', 'leave': 'quit',
-                 'look': 'look', 'l': 'look',
-                }
+                    'northeast': 'northeast', 'ne': 'northeast',
+                    'east': 'east', 'e': 'east',
+                    'southeast': 'southeast', 'se': 'southeast',
+                    'south': 'south', 's': 'south',
+                    'southwest': 'southwest', 'sw': 'southwest',
+                    'west': 'west', 'w': 'west',
+                    'northwest': 'northwest', 'nw': 'northwest',
+                    'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
+                    'stop': 'quit', 'leave': 'quit',
+                    'look': 'look', 'l': 'look',
+                   }
 
 # the "current" place, ie, where the player is
 current_place = white_house
