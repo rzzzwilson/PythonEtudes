@@ -2,7 +2,7 @@
 This experimental code is trying to implement a simple text adventure.
 
 We just have static data structures describing places.  The player may
-move around with the usual commands and pick up/drop objects.
+move around with the usual commands.
 
 We change TextAdventure.2.py to:
 
@@ -235,6 +235,16 @@ def pickup_object(noun):
 
     print(f"Sorry, I see no {noun} here.")
 
+def inventory():
+    """Print the player's inventory."""
+
+    if player.inventory:
+        print('You are carrying:')
+        for obj in player.inventory:
+            print(f'\t{object_name_ref[obj].description}')
+    else:
+        print("You aren't carrying anything.")
+
 def do_command(verb, noun=None):
     """Check if the command is legal in the current Place.  If so, do it.
 
@@ -260,21 +270,17 @@ def do_command(verb, noun=None):
             print("Sorry, you must use 'drop' with a noun, like 'drop axe'.")
         else:
             drop_object(noun)
+    elif verb == 'invent':
+        if noun:
+            # can't use a noun with "incentory"
+            print("Sorry, the 'inventory' command doesn't take a second word.")
+        else:
+            inventory()
     else:
         # might be a move
         if verb in current_place.connections:
             current_place = place_name_ref[current_place.connections[verb]]
             push_prev(current_place)
-
-def inventory():
-    """Print the player's inventory."""
-
-    if player.inventory:
-        print('You are carrying:')
-        for obj in player.inventory:
-            print(f'\t{object_name_ref[obj].description}')
-    else:
-        print("You aren't carrying anything.")
 
 # play the game
 force_look = False
@@ -290,8 +296,6 @@ while True:
         break
     elif verb == 'look':
         force_look = True
-    elif verb == 'invent':
-        inventory()
     else:
         do_command(verb, noun)
     print()
