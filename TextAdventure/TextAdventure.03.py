@@ -158,9 +158,9 @@ def describe_place(place, look=False):
     """
 
     if look or place not in previous_places[1:]:
-        print(f"You are {place.long_description}.")
+        print(f"You are {place.long_description}")
     else:
-        print(f"You are {place.description}.")
+        print(f"You are {place.description}")
 
     # if there's something here, print its/their description
     if place.objects:
