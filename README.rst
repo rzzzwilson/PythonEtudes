@@ -17,6 +17,8 @@
 +------------------------------+-----------------------------------------------+
 | `Secret Messages`_           | Encode a message in an image                  |
 +------------------------------+-----------------------------------------------+
+| `Notebook`_                  | Keep a collection of notes                    |
++------------------------------+-----------------------------------------------+
 
 Welcome to the Python Etudes wiki!
 
@@ -153,4 +155,16 @@ The etude starts
 `here <https://github.com/rzzzwilson/PythonEtudes/wiki/Secret_Messages.00>`_.
 The code is
 `here <https://github.com/rzzzwilson/PythonEtudes/tree/master/Secret_Messages>`_.
+
+Notebook
+========
+
+Not yet written.
+
+This pops up fairly often on reddit/r/learnpython: create a "notes" application
+that allows the user to:
+
+* create notes
+* edit notes
+* delete notes
 
