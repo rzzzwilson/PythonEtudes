@@ -19,6 +19,8 @@
 +------------------------------+-----------------------------------------------+
 | `Notebook`_                  | Keep a collection of notes                    |
 +------------------------------+-----------------------------------------------+
+| `The python "lambda"`_       | Discussion of the mysterious lambda           |
++------------------------------+-----------------------------------------------+
 
 Welcome to the Python Etudes wiki!
 
@@ -168,3 +170,9 @@ that allows the user to:
 * edit notes
 * delete notes
 
+The python "lambda"
+===================
+
+Not yet written.
+
+An attempt to explain how the python "lambda" works and show how to use it.
