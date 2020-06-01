@@ -4,14 +4,14 @@ This experimental code is trying to implement a simple text adventure.
 We just have static data structures describing places.  The player may
 move around with the usual commands.
 
-We change TextAdventure.0.py to have:
+We change TextAdventure.00.py to have:
 
 * a nicer 'quit' command to stop playing
-* a 'look' command to redescribe the current Place
-* automatic population of the "name_place" dictionary mapping the unique
-  place identifier string to the Place instance
 * code that displays a place "long description" if we are new to the Place,
   but displays a short description if we return to a Place we just left
+* a 'look' command to redescribe the current Place (long description)
+* automatic population of the "name_place" dictionary mapping the unique
+  place identifier string to the Place instance
 """
 
 class Place:
@@ -21,9 +21,9 @@ class Place:
         self.name = name
         self.description = description
         self.connections = connections
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description     # just in case no long description
+        if long_description:
+            self.long_description = long_description
 
     def __str__(self):
         """For debug."""
@@ -54,7 +54,7 @@ forest = Place('forest', 'in a dark difficult forest.',
 # string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
 name_place = {}
-for (obj_name, obj) in globals().copy().items():
+for (obj_name, obj) in globals().copy().items():    # MUST USE copy()!
     if isinstance(obj, Place):
         name = obj.name
         if name in name_place:      # check unique name is unique
@@ -64,17 +64,17 @@ for (obj_name, obj) in globals().copy().items():
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
-                 'northeast': 'northeast', 'ne': 'northeast',
-                 'east': 'east', 'e': 'east',
-                 'southeast': 'southeast', 'se': 'southeast',
-                 'south': 'south', 's': 'south',
-                 'southwest': 'southwest', 'sw': 'southwest',
-                 'west': 'west', 'w': 'west',
-                 'northwest': 'northwest', 'nw': 'northwest',
-                 'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
-                 'stop': 'quit', 'leave': 'quit',
-                 'look': 'look', 'l': 'look',
-                }
+                    'northeast': 'northeast', 'ne': 'northeast',
+                    'east': 'east', 'e': 'east',
+                    'southeast': 'southeast', 'se': 'southeast',
+                    'south': 'south', 's': 'south',
+                    'southwest': 'southwest', 'sw': 'southwest',
+                    'west': 'west', 'w': 'west',
+                    'northwest': 'northwest', 'nw': 'northwest',
+                    'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
+                    'stop': 'quit', 'leave': 'quit',
+                    'look': 'look', 'l': 'look',
+                   }
 
 # the "current" place, ie, where the player is
 current_place = white_house
@@ -91,7 +91,7 @@ def push_prev(place):
     Oldest entries are deleted to limit list to "num_previous" entries.
     """
 
-    previous_places.insert(0, place)
+    previous_places.insert(0, place)        # new place inserted at left
     del previous_places[num_previous:]
 
 def describe_place(place, look=False):
