@@ -281,6 +281,9 @@ def do_command(verb, noun=None):
         if verb in current_place.connections:
             current_place = place_name_ref[current_place.connections[verb]]
             push_prev(current_place)
+        else:
+            return False
+    return True
 
 # play the game
 force_look = False
@@ -297,7 +300,8 @@ while True:
     elif verb == 'look':
         force_look = True
     else:
-        do_command(verb, noun)
+        if not do_command(verb, noun):
+            print("Sorry, you can't do that.  Try again.\n")
     print()
 
 print('So long.')

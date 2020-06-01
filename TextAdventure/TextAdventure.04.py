@@ -63,6 +63,7 @@ class Monster:
     def __init__(self, name, description, place):
         self.name = name
         self.description = description
+        self.initial_place = place
 
     def move(self):
         """The monster moves in a random direction about 50% of the time."""
@@ -111,7 +112,7 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe',
+axe = Object('axe', 'a small Elvish axe.',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
@@ -119,12 +120,8 @@ axe = Object('axe', 'a small Elvish axe',
 object_initial_places = {'axe': 'glade'}
 
 # the monsters in this map
-goblin = Monster('goblin', 'A hairy goblin with very bad breath', 'glade')
+goblin = Monster('goblin', 'A hairy goblin with very bad breath.', 'glade')
 
-# this dictionary maps a Monster object to the Place it initially appears in
-monster_initial_places = {'goblin': 'glade'}
-
-# dynamically populate the "place_name_ref" dictionary with unique Place identifying
 # string mapping to the Place instance.
 # also check that unique name strings actually are UNIQUE!
 place_name_ref = {}
@@ -136,6 +133,18 @@ for (obj_name, obj) in globals().copy().items():
             raise ValueError(msg)
         place_name_ref[name] = obj
 
+# this dictionary maps a Monster name to the Place it initially appears in
+# we examine all Monster instances and extract the initial_place name attribute
+monster_initial_places = {}
+for (obj_name, obj) in globals().copy().items():
+    if isinstance(obj, Monster):
+        place = obj.initial_place
+        if place not in place_name_ref:     # check that place is valid
+            msg = f"Monster '{obj_name}' has invalid start Place '{place}'"
+            raise ValueError(msg)
+        monster_initial_places[obj_name] = place
+
+# dynamically populate the "object_name_ref" dictionary with unique Place identifying
 # code to place all objects in their initial position in the map
 # we also need to populate the "object_name_ref" ditionary
 object_name_ref = {}
@@ -171,7 +180,7 @@ allowed_commands = {'north': 'north', 'n': 'north',
                     'get': 'get', 'g': 'get', 'pickup': 'get',
                     'drop': 'drop', 'd': 'drop',
                     'inventory': 'invent', 'inv': 'invent', 'i': 'invent',
-                    'wait': 'wait', 'w': 'wait',
+                    'wait': 'wait',
                    }
 
 # we must map what the user might call an object to the "real" object name.
@@ -347,6 +356,9 @@ def do_command(verb, noun=None):
         if verb in current_place.connections:
             current_place = place_name_ref[current_place.connections[verb]]
             push_prev(current_place)
+        else:
+            return False
+    return True
 
 def move_monsters():
     """Move all monsters in the map."""
@@ -370,7 +382,8 @@ while True:
     elif verb == 'look':
         force_look = True
     else:
-        do_command(verb, noun)
+        if not do_command(verb, noun):
+            print("Sorry, you can't do that.  Try again.\n")
     move_monsters()
     print()
 
