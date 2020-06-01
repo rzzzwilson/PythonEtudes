@@ -17,9 +17,9 @@ class Place:
         self.name = name
         self.description = description
         self.connections = connections
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
         self.objects = []
 
     def __str__(self):
@@ -33,9 +33,9 @@ class Object:
     def __init__(self, name, description, long_description=None):
         self.name = name
         self.description = description
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
 
     def __str__(self):
         """For debug."""
@@ -79,7 +79,7 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe',
+axe = Object('axe', 'a small Elvish axe.',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
@@ -272,7 +272,7 @@ def do_command(verb, noun=None):
             drop_object(noun)
     elif verb == 'invent':
         if noun:
-            # can't use a noun with "incentory"
+            # can't use a noun with "inventory"
             print("Sorry, the 'inventory' command doesn't take a second word.")
         else:
             inventory()
