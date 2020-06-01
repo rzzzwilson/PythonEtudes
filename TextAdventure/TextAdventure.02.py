@@ -4,7 +4,7 @@ This experimental code is trying to implement a simple text adventure.
 We just have static data structures describing places.  The player may
 move around with the usual commands and pick up/drop objects.
 
-We change TextAdventure.1.py to:
+We change TextAdventure.01.py to:
 
 * have objects that may be picked up and dropped
 * allow Places to contain objects
@@ -17,9 +17,9 @@ class Place:
         self.name = name
         self.description = description
         self.connections = connections
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
         self.objects = []
 
     def __str__(self):
@@ -33,9 +33,9 @@ class Object:
     def __init__(self, name, description, long_description=None):
         self.name = name
         self.description = description
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
 
     def __str__(self):
         """For debug."""
@@ -50,7 +50,7 @@ white_house = Place('white_house', 'at the White house.',
                     long_description=('at the White house. '
                                       'Paths lead south and east from here.'))
 
-path = Place('path', 'on a narrow path.',
+path = Place('path', 'on a narrow east-west path.',
              connections={'east': 'glade',
                           'west': 'white_house'})
 
@@ -67,7 +67,7 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe',
+axe = Object('axe', 'a small Elvish axe.',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
