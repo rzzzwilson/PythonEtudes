@@ -21,16 +21,16 @@ class Place:
 
 # the Places in this adventure
 white_house = Place('white_house', 'at the White house.',
-                    connections = {'east': 'path',
-                                   'south': 'forest'})
+                    connections={'east': 'path',
+                                 'south': 'forest'})
 
 path = Place('path', 'on a narrow path.',
              connections={'east': 'glade',
                           'west': 'white_house'})
 
 glade = Place('glade', 'in a shadowed glade.',
-              connections = {'west': 'path',
-                             'southwest': 'forest'})
+              connections={'west': 'path',
+                           'southwest': 'forest'})
 
 forest = Place('forest', 'in a dark difficult forest.',
                connections={'northeast': 'glade',
