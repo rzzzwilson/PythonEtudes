@@ -24,7 +24,7 @@ white_house = Place('white_house', 'at the White house.',
                     connections={'east': 'path',
                                  'south': 'forest'})
 
-path = Place('path', 'on a narrow path.',
+path = Place('path', 'on a narrow east-west path.',
              connections={'east': 'glade',
                           'west': 'white_house'})
 

@@ -62,7 +62,7 @@ white_house = Place('white_house', 'at the White house.',
                     long_description=('at the White house. '
                                       'Paths lead south and east from here.'))
 
-path = Place('path', 'on a narrow path.',
+path = Place('path', 'on a narrow east-west path.',
              connections={'east': 'glade',
                           'west': 'white_house'})
 
