@@ -106,7 +106,6 @@ for (obj_name, obj) in globals().copy().items():
         place = obj.initial_place
         place_ref = globals()[place]
         place_ref.objects.append(name)
-        print(f'Placed Object {name} into {place_ref}')
         
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
@@ -162,11 +161,11 @@ def describe_place(place, look=False):
     """
 
     if look or place not in previous_places[1:]:
-        print('You are ' + place.long_description)
+        print(f"You are {place.long_description}")
     else:
-        print('You are ' + place.description)
+        print(f"You are {place.description}")
 
-    # if there's something here, print its/their description
+    # if there's an object here, print its description
     if place.objects:
         print('\nYou see here:')
         for obj_name in place.objects:

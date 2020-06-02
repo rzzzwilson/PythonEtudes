@@ -4,7 +4,7 @@ This experimental code is trying to implement a simple text adventure.
 We just have static data structures describing places.  The player may
 move around with the usual commands.
 
-We change TextAdventure.3.py to:
+We change TextAdventure.03.py to:
 
 * create a Monster object
 * the Monster object may move around the map
@@ -20,10 +20,11 @@ class Place:
         self.name = name
         self.description = description
         self.connections = connections
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
         self.objects = []
+        self.monsters = []
 
     def __str__(self):
         """For debug."""
@@ -33,12 +34,13 @@ class Place:
 class Object:
     """An object."""
 
-    def __init__(self, name, description, long_description=None):
+    def __init__(self, name, description, place, long_description=None):
         self.name = name
         self.description = description
-        if long_description is None:
-            long_description = description
-        self.long_description = long_description
+        self.initial_place = place
+        self.long_description = description
+        if long_description:
+            self.long_description = long_description
 
     def __str__(self):
         """For debug."""
@@ -73,14 +75,19 @@ class Monster:
             return      # no move this turn
 
         # look at the current "place" for possible moves, pick one
-        place = monster_name_place[self.name]
+        place = self.initial_place
         place_ref = place_name_ref[place]
         direction = random.choice(list(place_ref.connections.keys()))
 
         # figure out where that leads to and move
         new_place = place_ref.connections[direction]
         new_place_ref = place_name_ref[new_place]
-        monster_name_place[self.name] = new_place
+        print(f'self.name={self.name}, place_ref.monsters={place_ref.monsters}')
+        place_ref.monsters.remove(self.name)
+        new_place_ref.monsters.append(self.name)
+
+        # finally, update self.initial_place since that will be used when loading from file
+        self.initial_place = new_place
 
     def __str__(self):
         """For debug."""
@@ -112,58 +119,51 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe.',
+axe = Object('axe', 'a small Elvish axe.', 'glade',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
-# this dictionary maps an object to the Place it initially appears in
-object_initial_places = {'axe': 'glade'}
-
-# the monsters in this map
+# the monsters in this adventure
 goblin = Monster('goblin', 'A hairy goblin with very bad breath.', 'glade')
 
-# string mapping to the Place instance.
+# populate the "place_name_ref", "object_name_ref" & monster_name_ref dictionaries
 # also check that unique name strings actually are UNIQUE!
 place_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
-        if name in place_name_ref:      # check unique name is unique
+        if name in place_name_ref:      # check unique name _is_ unique
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         place_name_ref[name] = obj
 
-# this dictionary maps a Monster name to the Place it initially appears in
-# we examine all Monster instances and extract the initial_place name attribute
-monster_initial_places = {}
+object_name_ref = {}
+for (obj_name, obj) in globals().copy().items():
+    if isinstance(obj, Object):
+        name = obj.name
+        if name in object_name_ref:     # check unique name _is_ unique
+            msg = f"Object in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
+            raise ValueError(msg)
+        object_name_ref[name] = obj
+
+        # place Object into the required Place
+        place = obj.initial_place
+        place_ref = globals()[place]
+        place_ref.objects.append(name)
+
+monster_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Monster):
-        place = obj.initial_place
-        if place not in place_name_ref:     # check that place is valid
-            msg = f"Monster '{obj_name}' has invalid start Place '{place}'"
+        name = obj.name
+        if name in monster_name_ref:    # check unique name _is_ unique
+            msg = f"Monster in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
-        monster_initial_places[obj_name] = place
+        monster_name_ref[name] = obj
 
-# dynamically populate the "object_name_ref" dictionary with unique Place identifying
-# code to place all objects in their initial position in the map
-# we also need to populate the "object_name_ref" ditionary
-object_name_ref = {}
-for (name, place) in object_initial_places.items():
-    object_ref = globals()[name]
-    object_name_ref[name] = object_ref
-    place_ref = globals()[place]
-    place_ref.objects.append(name)
-
-# code to place all monsters in their initial position in the map
-# we also need to populate the "monster_name_ref" ditionary
-monster_name_place = {}     # map monster name to place string
-monster_name_ref = {}       # map monster name to actual monster reference
-for (name, place) in monster_initial_places.items():
-    monster_ref = globals()[name]
-    monster_name_ref[name] = monster_ref
-    place_ref = globals()[place]
-#    monster_name_place[name] = place_ref
-    monster_name_place[name] = place
+        # place Monster into the required Place
+        place = obj.initial_place
+        place_ref = place_name_ref[place]
+        place_ref.monsters.append(name)
 
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
@@ -187,15 +187,19 @@ allowed_commands = {'north': 'north', 'n': 'north',
 # this dictionary maps a user name to a list of actual object names
 # whenever a user mentions a name like 'axe' we look through this dictionary
 # and get a list of object ID strings that might be the user object
-user_names_real = {'axe': ['axe'],
-                  }
+#
+# we must do this because there could be two or more axes in the map
+# and we would like the user to be able to just say "get axe" and thereby
+# pick the "golden_axe" Object.  If there is more than one axe what do we do?
+#user_names_real = {'axe': ['axe'],
+#                  }
 
 # the "current" place, ie, where the player is
 current_place = white_house
 
 # the previous Place, used to implement the "short" description on revisit
 previous_places = []
-num_previous = 3    # the number of previous places to remember in "previous_places"
+num_previous = 4    # the number of previous places to remember in "previous_places"
 
 def push_prev(place):
     """Push a place onto the "previous_places" list.
@@ -227,15 +231,16 @@ def describe_place(place, look=False):
             print(f'\t{object_name_ref[obj_name].description}')
 
     # if there are monsters here, print their descriptions
-    place_name = place.name
+#    place_name = place.name
     prefix = False
-    for (monster_name, monster_place) in monster_name_place.items():
-        if monster_place == place.name:
-            if not prefix:
-                print('\nYou see:')
-                prefix = True
-            monster_ref = monster_name_ref[monster_name]
-            print(f'\t{monster_ref.description}')
+#    for (monster_name, monster_place) in monster_name_place.items():
+#        if monster_place == place.name:
+    for monster_name in place.monsters:
+        if not prefix:
+            print('\nYou see:')
+            prefix = True
+        monster_ref = monster_name_ref[monster_name]
+        print(f'\t{monster_ref.description}')
 
 def get_command():
     """Get a legal command.
@@ -266,19 +271,13 @@ def drop_object(noun):
     noun  the noun string the user used
     """
 
-    # is this noun one of the recognized nouns?
-    if noun not in user_names_real:
-        print(f"I don't know this '{noun}'.")
-        return
-
     # see if an object matching the user name is in the player's inventory
-    for obj_id in user_names_real[noun]:
-        if obj_id in player.inventory:
-            # object there, drop it
-            player.inventory.remove(obj_id)
-            current_place.objects.append(obj_id)
-            print('Dropped.')
-            return
+    if noun in player.inventory:
+        # object there, drop it
+        player.inventory.remove(noun)
+        current_place.objects.append(noun)
+        print('Dropped.')
+        return
 
     print(f"Sorry, you aren't carrying this: {noun}.")
 
@@ -288,19 +287,13 @@ def pickup_object(noun):
     noun  the noun string the user used
     """
 
-    # is this noun one of the recognized nouns?
-    if noun not in user_names_real:
-        print(f"I don't know this '{noun}'.")
-        return
-
     # see if an object matching the user name is in the current Place
-    for obj_id in user_names_real[noun]:
-        if obj_id in current_place.objects:
-            # object here, take it
-            current_place.objects.remove(obj_id)
-            player.inventory.append(obj_id)
-            print('Taken.')
-            return
+    if noun in current_place.objects:
+        # object here, take it
+        current_place.objects.remove(noun)
+        player.inventory.append(noun)
+        print('Taken.')
+        return
 
     print(f"Sorry, I see no {noun} here.")
 
