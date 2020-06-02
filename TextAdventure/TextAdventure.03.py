@@ -4,7 +4,7 @@ This experimental code is trying to implement a simple text adventure.
 We just have static data structures describing places.  The player may
 move around with the usual commands.
 
-We change TextAdventure.2.py to:
+We change TextAdventure.02.py to:
 
 * create a Player object that has an inventory
 * add the "pickup" and "drop" commands, with aliases
@@ -30,9 +30,10 @@ class Place:
 class Object:
     """An object."""
 
-    def __init__(self, name, description, long_description=None):
+    def __init__(self, name, description, place, long_description=None):
         self.name = name
         self.description = description
+        self.initial_place = place
         self.long_description = description
         if long_description:
             self.long_description = long_description
@@ -79,18 +80,14 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe.',
+axe = Object('axe', 'a small Elvish axe.', 'glade',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
-# this dictionary maps an object to the Place it initially appears in
-object_initial_places = {'axe': 'glade'}
-
-
-# dynamically populate the "place_name_ref" dictionary with unique Place identifying
-# string mapping to the Place instance.
+# dynamically populate the "place_name_ref" and "object_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
 place_name_ref = {}
+object_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
@@ -98,16 +95,19 @@ for (obj_name, obj) in globals().copy().items():
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         place_name_ref[name] = obj
+    elif isinstance(obj, Object):
+        name = obj.name
+        if name in object_name_ref:     # check unique name is unique
+            msg = f"Object in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
+            raise ValueError(msg)
+        object_name_ref[name] = obj
 
-# code to place all objects in their initial position in the map
-# we also need to populate the "object_name_ref" ditionary
-object_name_ref = {}
-for (name, place) in object_initial_places.items():
-    object_ref = globals()[name]
-    object_name_ref[name] = object_ref
-    place_ref = globals()[place]
-    place_ref.objects.append(name)
-
+        # place Object into the required Place
+        place = obj.initial_place
+        place_ref = globals()[place]
+        place_ref.objects.append(name)
+        print(f'Placed Object {name} into {place_ref}')
+        
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
                     'northeast': 'northeast', 'ne': 'northeast',
@@ -129,15 +129,19 @@ allowed_commands = {'north': 'north', 'n': 'north',
 # this dictionary maps a user name to a list of actual object names
 # whenever a user mentions a name like 'axe' we look through this dictionary
 # and get a list of object ID strings that might be the user object
-user_names_real = {'axe': ['axe'],
-                  }
+#
+# we must do this because there could be two or more axes in the map
+# and we would like the user to be able to just say "get axe" and thereby
+# pick the "golden_axe" Object.  If there is more than one axe what do we do?
+#user_names_real = {'axe': ['axe'],
+#                  }
 
 # the "current" place, ie, where the player is
 current_place = white_house
 
 # the previous Place, used to implement the "short" description on revisit
 previous_places = []
-num_previous = 3    # the number of previous places to remember in "previous_places"
+num_previous = 4    # the number of previous places to remember in "previous_places"
 
 def push_prev(place):
     """Push a place onto the "previous_places" list.
@@ -158,9 +162,9 @@ def describe_place(place, look=False):
     """
 
     if look or place not in previous_places[1:]:
-        print(f"You are {place.long_description}")
+        print('You are ' + place.long_description)
     else:
-        print(f"You are {place.description}")
+        print('You are ' + place.description)
 
     # if there's something here, print its/their description
     if place.objects:
@@ -197,19 +201,13 @@ def drop_object(noun):
     noun  the noun string the user used
     """
 
-    # is this noun one of the recognized nouns?
-    if noun not in user_names_real:
-        print(f"I don't know this '{noun}'.")
-        return
-
     # see if an object matching the user name is in the player's inventory
-    for obj_id in user_names_real[noun]:
-        if obj_id in player.inventory:
-            # object there, drop it
-            player.inventory.remove(obj_id)
-            current_place.objects.append(obj_id)
-            print('Dropped.')
-            return
+    if noun in player.inventory:
+        # object there, drop it
+        player.inventory.remove(noun)
+        current_place.objects.append(noun)
+        print('Dropped.')
+        return
 
     print(f"Sorry, you aren't carrying this: {noun}.")
 
@@ -219,19 +217,13 @@ def pickup_object(noun):
     noun  the noun string the user used
     """
 
-    # is this noun one of the recognized nouns?
-    if noun not in user_names_real:
-        print(f"I don't know this '{noun}'.")
-        return
-
     # see if an object matching the user name is in the current Place
-    for obj_id in user_names_real[noun]:
-        if obj_id in current_place.objects:
-            # object here, take it
-            current_place.objects.remove(obj_id)
-            player.inventory.append(obj_id)
-            print('Taken.')
-            return
+    if noun in current_place.objects:
+        # object here, take it
+        current_place.objects.remove(noun)
+        player.inventory.append(noun)
+        print('Taken.')
+        return
 
     print(f"Sorry, I see no {noun} here.")
 

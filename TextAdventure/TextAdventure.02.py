@@ -30,9 +30,10 @@ class Place:
 class Object:
     """An object."""
 
-    def __init__(self, name, description, long_description=None):
+    def __init__(self, name, description, place, long_description=None):
         self.name = name
         self.description = description
+        self.initial_place = place
         self.long_description = description
         if long_description:
             self.long_description = long_description
@@ -67,18 +68,14 @@ forest = Place('forest', 'in a dark difficult forest.',
                                  'Narrow tracks go northeast and north.'))
 
 # the objects in this adventure
-axe = Object('axe', 'a small Elvish axe.',
+axe = Object('axe', 'a small Elvish axe.', 'glade',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
-# this dictionary maps an object to the Place it initially appears in
-object_initial_places = {'axe': 'glade'}
-
-
-# dynamically populate the "place_name_ref" dictionary with unique Place
-# identifying string mapping to the Place instance.
+# dynamically populate the "place_name_ref" and "object_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
 place_name_ref = {}
+object_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
@@ -86,16 +83,19 @@ for (obj_name, obj) in globals().copy().items():
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         place_name_ref[name] = obj
+    elif isinstance(obj, Object):
+        name = obj.name
+        if name in object_name_ref:     # check unique name is unique
+            msg = f"Object in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
+            raise ValueError(msg)
+        object_name_ref[name] = obj
 
-# code to place all objects in their initial position in the map
-# we also need to populate the "object_name_ref" ditionary
-object_name_ref = {}
-for (name, place) in object_initial_places.items():
-    object_ref = globals()[name]
-    object_name_ref[name] = object_ref
-    place_ref = globals()[place]
-    place_ref.objects.append(name)
-
+        # place Object into the required Place
+        place = obj.initial_place
+        place_ref = globals()[place]
+        place_ref.objects.append(name)
+        print(f'Placed Object {name} into {place_ref}')
+        
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
                     'northeast': 'northeast', 'ne': 'northeast',
