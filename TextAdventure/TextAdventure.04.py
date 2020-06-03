@@ -82,7 +82,6 @@ class Monster:
         # figure out where that leads to and move
         new_place = place_ref.connections[direction]
         new_place_ref = place_name_ref[new_place]
-        print(f'self.name={self.name}, place_ref.monsters={place_ref.monsters}')
         place_ref.monsters.remove(self.name)
         new_place_ref.monsters.append(self.name)
 
@@ -126,8 +125,12 @@ axe = Object('axe', 'a small Elvish axe.', 'glade',
 # the monsters in this adventure
 goblin = Monster('goblin', 'A hairy goblin with very bad breath.', 'glade')
 
-# populate the "place_name_ref", "object_name_ref" & monster_name_ref dictionaries
+# the Player instance
+player = Player('Fred')
+
+# populate "place_name_ref", "object_name_ref" & "monster_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
+# we do Places first, because Objects/Monsters need Places defined first.
 place_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
@@ -138,6 +141,7 @@ for (obj_name, obj) in globals().copy().items():
         place_name_ref[name] = obj
 
 object_name_ref = {}
+monster_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Object):
         name = obj.name
@@ -150,10 +154,7 @@ for (obj_name, obj) in globals().copy().items():
         place = obj.initial_place
         place_ref = globals()[place]
         place_ref.objects.append(name)
-
-monster_name_ref = {}
-for (obj_name, obj) in globals().copy().items():
-    if isinstance(obj, Monster):
+    elif isinstance(obj, Monster):
         name = obj.name
         if name in monster_name_ref:    # check unique name _is_ unique
             msg = f"Monster in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
@@ -224,23 +225,19 @@ def describe_place(place, look=False):
     else:
         print(f"You are {place.description}")
 
-    # if there's an object here, print its description
+    # if there's an Object here, print its description
     if place.objects:
         print('\nYou see here:')
-        for obj_name in place.objects:
-            print(f'\t{object_name_ref[obj_name].description}')
+        for object_name in place.objects:
+            object_ref = object_name_ref[object_name]
+            print(f'\t{object_ref.description}')
 
     # if there are monsters here, print their descriptions
-#    place_name = place.name
-    prefix = False
-#    for (monster_name, monster_place) in monster_name_place.items():
-#        if monster_place == place.name:
-    for monster_name in place.monsters:
-        if not prefix:
-            print('\nYou see:')
-            prefix = True
-        monster_ref = monster_name_ref[monster_name]
-        print(f'\t{monster_ref.description}')
+    if place.monsters:
+        print('\nYou see:')
+        for monster_name in place.monsters:
+            monster_ref = monster_name_ref[monster_name]
+            print(f'\t{monster_ref.description}')
 
 def get_command():
     """Get a legal command.
@@ -363,8 +360,6 @@ def move_monsters():
 # play the game
 force_look = False
 push_prev(current_place)    # start at the "current_place"
-
-player = Player('Fred')
 
 while True:
     describe_place(current_place, look=force_look)
