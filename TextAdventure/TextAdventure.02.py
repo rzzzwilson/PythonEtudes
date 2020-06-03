@@ -33,7 +33,7 @@ class Object:
     def __init__(self, name, description, place, long_description=None):
         self.name = name
         self.description = description
-        self.initial_place = place
+        self.place = place
         self.long_description = description
         if long_description:
             self.long_description = long_description
@@ -94,7 +94,7 @@ for (obj_name, obj) in globals().copy().items():
         object_name_ref[name] = obj
 
         # place Object into the required Place
-        place = obj.initial_place
+        place = obj.place
         place_ref = globals()[place]
         place_ref.objects.append(name)
         

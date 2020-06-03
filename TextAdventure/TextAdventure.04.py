@@ -37,7 +37,7 @@ class Object:
     def __init__(self, name, description, place, long_description=None):
         self.name = name
         self.description = description
-        self.initial_place = place
+        self.place = place
         self.long_description = description
         if long_description:
             self.long_description = long_description
@@ -65,7 +65,7 @@ class Monster:
     def __init__(self, name, description, place):
         self.name = name
         self.description = description
-        self.initial_place = place
+        self.place = place
 
     def move(self):
         """The monster moves in a random direction about 50% of the time."""
@@ -75,7 +75,7 @@ class Monster:
             return      # no move this turn
 
         # look at the current "place" for possible moves, pick one
-        place = self.initial_place
+        place = self.place
         place_ref = place_name_ref[place]
         direction = random.choice(list(place_ref.connections.keys()))
 
@@ -85,8 +85,8 @@ class Monster:
         place_ref.monsters.remove(self.name)
         new_place_ref.monsters.append(self.name)
 
-        # finally, update self.initial_place since that will be used when loading from file
-        self.initial_place = new_place
+        # finally, update self.place since that will be used when loading from file
+        self.place = new_place
 
     def __str__(self):
         """For debug."""
@@ -151,7 +151,7 @@ for (obj_name, obj) in globals().copy().items():
         object_name_ref[name] = obj
 
         # place Object into the required Place
-        place = obj.initial_place
+        place = obj.place
         place_ref = globals()[place]
         place_ref.objects.append(name)
     elif isinstance(obj, Monster):
@@ -162,7 +162,7 @@ for (obj_name, obj) in globals().copy().items():
         monster_name_ref[name] = obj
 
         # place Monster into the required Place
-        place = obj.initial_place
+        place = obj.place
         place_ref = place_name_ref[place]
         place_ref.monsters.append(name)
 
