@@ -79,15 +79,18 @@ forest = Place('forest', 'in a dark difficult forest.',
                long_description=('in a dark difficult forest. '
                                  'Narrow tracks go northeast and north.'))
 
-# the objects in this adventure
+# the Objects in this adventure
 axe = Object('axe', 'a small Elvish axe.', 'glade',
              long_description=('a small Elvish axe. '
                                'There are faint unreadable engravings on the head.'))
 
+# the Player instance
+player = Player('Fred')
+
 # dynamically populate the "place_name_ref" and "object_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
+# we do Places first, because Objects need Places defined first.
 place_name_ref = {}
-object_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
@@ -95,7 +98,10 @@ for (obj_name, obj) in globals().copy().items():
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         place_name_ref[name] = obj
-    elif isinstance(obj, Object):
+
+object_name_ref = {}
+for (obj_name, obj) in globals().copy().items():
+    if isinstance(obj, Object):
         name = obj.name
         if name in object_name_ref:     # check unique name is unique
             msg = f"Object in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
@@ -165,7 +171,7 @@ def describe_place(place, look=False):
     else:
         print(f"You are {place.description}")
 
-    # if there's an object here, print its description
+    # if there's an Object here, print its description
     if place.objects:
         print('\nYou see here:')
         for obj_name in place.objects:
@@ -279,8 +285,6 @@ def do_command(verb, noun=None):
 # play the game
 force_look = False
 push_prev(current_place)    # start at the "current_place"
-
-player = Player('Fred')
 
 while True:
     describe_place(current_place, look=force_look)

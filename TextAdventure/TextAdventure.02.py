@@ -74,8 +74,8 @@ axe = Object('axe', 'a small Elvish axe.', 'glade',
 
 # dynamically populate the "place_name_ref" and "object_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
+# we do Places first, because Objects need Places defined first.
 place_name_ref = {}
-object_name_ref = {}
 for (obj_name, obj) in globals().copy().items():
     if isinstance(obj, Place):
         name = obj.name
@@ -83,7 +83,10 @@ for (obj_name, obj) in globals().copy().items():
             msg = f"Place in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
             raise ValueError(msg)
         place_name_ref[name] = obj
-    elif isinstance(obj, Object):
+
+object_name_ref = {}
+for (obj_name, obj) in globals().copy().items():
+    if isinstance(obj, Object):
         name = obj.name
         if name in object_name_ref:     # check unique name is unique
             msg = f"Object in variable '{obj_name}' doesn't have a unique identifier: '{name}'"
@@ -94,7 +97,6 @@ for (obj_name, obj) in globals().copy().items():
         place = obj.initial_place
         place_ref = globals()[place]
         place_ref.objects.append(name)
-        print(f'Placed Object {name} into {place_ref}')
         
 # map allowed input moves to "canonical" move strings
 allowed_commands = {'north': 'north', 'n': 'north',
@@ -136,11 +138,11 @@ def describe_place(place, look=False):
     """
 
     if look or place not in previous_places[1:]:
-        print('You are ' + place.long_description)
+        print(f"You are {place.long_description}")
     else:
-        print('You are ' + place.description)
+        print(f"You are {place.description}")
 
-    # if there's something here, print its/their description
+    # if there's an Object here, print its description
     if place.objects:
         print('\nYou see here:')
         for obj_name in place.objects:
