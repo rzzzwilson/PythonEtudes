@@ -72,9 +72,11 @@ class Object:
 class Player:
     """An object to hold player information."""
 
-    def __init__(self, name):
+    def __init__(self, name, inventory=None):
         self.name = name
-        self.inventory = []
+        if inventory is None:
+            inventory = []
+        self.inventory = inventory
 
     def state(self):
         """Return a "dictionary" description of the Player.
@@ -84,6 +86,7 @@ class Player:
         """
 
         return {'name': self.name,
+                'inventory': self.inventory,
                }
                 
     def __str__(self):
@@ -231,9 +234,7 @@ def restore_state(fname):
         globals()[name] = Monster(**monster)
 
     player = restore_dict['Player']
-    print(f'player={player}')
-    name = player['name']
-    globals()[name] = Player(**player)
+    globals()['player'] = Player(**player)
 
     map_instances_ref()
 
@@ -435,8 +436,10 @@ def map_instances_ref():
     
             # place Object into the required Place
             place = obj.place
-            place_ref = globals()[place]
-            place_ref.objects.append(name)
+            if place:
+                # only if not None
+                place_ref = globals()[place]
+                place_ref.objects.append(name)
         elif isinstance(obj, Monster):
             name = obj.name
             if name in monster_name_ref:    # check unique name _is_ unique
