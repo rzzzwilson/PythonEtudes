@@ -71,9 +71,11 @@ class Object:
 class Player:
     """An object to hold player information."""
 
-    def __init__(self, name):
+    def __init__(self, name, inventory=None):
         self.name = name
-        self.inventory = []
+        if inventory is None:
+            inventory = []
+        self.inventory = inventory
 
     def state(self):
         """Return a "dictionary" description of the Player.
@@ -83,6 +85,7 @@ class Player:
         """
 
         return {'name': self.name,
+                'inventory': self.inventory,
                }
                 
     def __str__(self):
