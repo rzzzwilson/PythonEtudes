@@ -69,8 +69,8 @@ forest = Place('forest', 'in a dark difficult forest.',
 
 # the objects in this adventure
 axe = Object('axe', 'a small Elvish axe.', 'glade',
-             long_description=('a small Elvish axe. '
-                               'There are faint unreadable engravings on the head.'))
+             long_description='a small Elvish axe. '
+                              'There are faint unreadable engravings on the head.')
 
 # dynamically populate the "place_name_ref" and "object_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!

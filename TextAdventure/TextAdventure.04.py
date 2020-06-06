@@ -75,8 +75,7 @@ class Monster:
             return      # no move this turn
 
         # look at the current "place" for possible moves, pick one
-        place = self.place
-        place_ref = place_name_ref[place]
+        place_ref = place_name_ref[self.place]
         direction = random.choice(list(place_ref.connections.keys()))
 
         # figure out where that leads to and move
