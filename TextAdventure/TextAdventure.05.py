@@ -3,7 +3,7 @@ This experimental code is trying to implement a simple text adventure.
 
 We change TextAdventure.04.py to:
 
-* save data to a save file on shutdown.
+* write data to a save file on shutdown.
 """
 
 import json

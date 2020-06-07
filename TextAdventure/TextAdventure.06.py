@@ -39,7 +39,12 @@ class Place:
     def __str__(self):
         """For debug."""
 
-        return f"Place('{self.name}')"
+        return f"Place('{self.name}, .objects={self.objects}, .monster={self.monsters}')"
+
+    def __repr__(self):
+        """For debug."""
+
+        return f"Place('{self.name}, .objects={self.objects}, .monster={self.monsters}')"
 
 class Object:
     """An object."""
@@ -211,14 +216,21 @@ def save_state(fname):
         fd.write(json.dumps(state, indent=4))
 
 def restore_state(fname):
-    """Restore game state from the given file."""
+    """Restore game state from the given file.
+
+    If all went OK, return True, else False (ie, error reading file).
+    """
 
     global current_place
 
     with open(fname, 'r') as fd:
         restore_data = fd.read()
 
-    restore_dict = json.loads(restore_data)
+    try:
+        restore_dict = json.loads(restore_data)
+    except json.decoder.JSONDecodeError:
+        # bad state file!?
+        return False
 
     # restore data from the file
     for place in restore_dict['Place']:
@@ -239,6 +251,8 @@ def restore_state(fname):
     map_instances_ref()
 
     current_place = place_name_ref[restore_dict['current_place']]
+
+    return True
 
 def push_prev(place):
     """Push a place onto the "previous_places" list.
@@ -314,7 +328,7 @@ def drop_object(noun):
 
         # update Object state
         obj_ref = object_name_ref[noun]
-        obj_ref.place = current_place
+        obj_ref.place = current_place.name
 
         print('Dropped.')
         return
@@ -479,7 +493,8 @@ allowed_commands = {'north': 'north', 'n': 'north',
 ######
 
 if os.path.exists('state.json') and os.path.isfile('state.json'):
-    restore_state('state.json')
+    if not restore_state('state.json'):
+        init_default_state()
 else:
     init_default_state()
 
