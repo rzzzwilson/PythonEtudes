@@ -81,7 +81,6 @@ class Player:
         """Return a "dictionary" description of the Player.
 
         Just enough to recreate the Player from saved data.
-        "self.inventory" will be filled in dynamically.
         """
 
         return {'name': self.name,
