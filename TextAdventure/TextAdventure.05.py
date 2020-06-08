@@ -139,7 +139,9 @@ class Monster:
         return f"Monster('{self.name}')"
 
 #####
-# Start of static data
+# Start of state data.
+# This data contains no python object references and can be written to or
+# restored from a "save" file.
 #####
 
 # the Places in this adventure
@@ -178,6 +180,28 @@ current_place = white_house
 
 # the Player instance
 player = Player('Fred')
+
+# map allowed input moves to "canonical" move strings
+allowed_commands = {'north': 'north', 'n': 'north',
+                    'northeast': 'northeast', 'ne': 'northeast',
+                    'east': 'east', 'e': 'east',
+                    'southeast': 'southeast', 'se': 'southeast',
+                    'south': 'south', 's': 'south',
+                    'southwest': 'southwest', 'sw': 'southwest',
+                    'west': 'west', 'w': 'west',
+                    'northwest': 'northwest', 'nw': 'northwest',
+                    'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
+                    'stop': 'quit', 'leave': 'quit',
+                    'look': 'look', 'l': 'look',
+                    'get': 'get', 'g': 'get', 'pickup': 'get',
+                    'drop': 'drop', 'd': 'drop',
+                    'inventory': 'invent', 'inv': 'invent', 'i': 'invent',
+                    'wait': 'wait',
+                   }
+
+#####
+# End of state data
+#####
 
 # populate "place_name_ref", "object_name_ref" & "monster_name_ref" dictionaries
 # also check that unique name strings actually are UNIQUE!
@@ -223,24 +247,6 @@ for (obj_name, obj) in globals().copy().items():
 # not doing this confuses the "save_state()" code
 del obj, place_ref
 
-# map allowed input moves to "canonical" move strings
-allowed_commands = {'north': 'north', 'n': 'north',
-                    'northeast': 'northeast', 'ne': 'northeast',
-                    'east': 'east', 'e': 'east',
-                    'southeast': 'southeast', 'se': 'southeast',
-                    'south': 'south', 's': 'south',
-                    'southwest': 'southwest', 'sw': 'southwest',
-                    'west': 'west', 'w': 'west',
-                    'northwest': 'northwest', 'nw': 'northwest',
-                    'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
-                    'stop': 'quit', 'leave': 'quit',
-                    'look': 'look', 'l': 'look',
-                    'get': 'get', 'g': 'get', 'pickup': 'get',
-                    'drop': 'drop', 'd': 'drop',
-                    'inventory': 'invent', 'inv': 'invent', 'i': 'invent',
-                    'wait': 'wait',
-                   }
-
 # the previous Place, used to implement the "short" description on revisit
 previous_places = []
 num_previous = 4    # the number of previous places to remember in "previous_places"
@@ -253,11 +259,14 @@ def save_state(fname):
 
     # save Player, Place, Object and Monster data
     state = {'current_place': None,
-             'Player': {}, 'Place': [], 'Object': [], 'Monster': []}
+             'Player': {}, 'Place': [], 'Object': [], 'Monster': [],
+             'allowed_commands': {}}
 
     for (obj_name, obj) in globals().items():
         if obj_name == 'current_place':
             state['current_place'] = obj.name
+        elif obj_name == 'allowed_commands':
+            state['allowed_commands'] = obj
         elif isinstance(obj, Player):
             state['Player'] = obj.state()
         elif isinstance(obj, Place):
@@ -345,7 +354,7 @@ def drop_object(noun):
 
         # update Object state
         obj_ref = object_name_ref[noun]
-        obj_ref.place = current_place
+        obj_ref.place = current_place.name
 
         print('Dropped.')
         return

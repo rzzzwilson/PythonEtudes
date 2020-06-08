@@ -189,6 +189,25 @@ def init_default_state():
 
     map_instances_ref()
 
+    global allowed_commands
+    # map allowed input moves to "canonical" move strings
+    allowed_commands = {'north': 'north', 'n': 'north',
+                        'northeast': 'northeast', 'ne': 'northeast',
+                        'east': 'east', 'e': 'east',
+                        'southeast': 'southeast', 'se': 'southeast',
+                        'south': 'south', 's': 'south',
+                        'southwest': 'southwest', 'sw': 'southwest',
+                        'west': 'west', 'w': 'west',
+                        'northwest': 'northwest', 'nw': 'northwest',
+                        'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
+                        'stop': 'quit', 'leave': 'quit',
+                        'look': 'look', 'l': 'look',
+                        'get': 'get', 'g': 'get', 'pickup': 'get',
+                        'drop': 'drop', 'd': 'drop',
+                            'inventory': 'invent', 'inv': 'invent', 'i': 'invent',
+                        'wait': 'wait',
+                       }
+
 def save_state(fname):
     """Save state to the 'fname' file.
 
@@ -197,11 +216,14 @@ def save_state(fname):
 
     # save Player, Place, Object and Monster data
     state = {'current_place': None,
-             'Player': {}, 'Place': [], 'Object': [], 'Monster': []}
+             'Player': {}, 'Place': [], 'Object': [], 'Monster': [],
+             'allowed_commands': {}}
 
     for (obj_name, obj) in globals().items():
         if obj_name == 'current_place':
             state['current_place'] = obj.name
+        elif obj_name == 'allowed_commands':
+            state['allowed_commands'] = obj
         elif isinstance(obj, Player):
             state['Player'] = obj.state()
         elif isinstance(obj, Place):
@@ -220,8 +242,6 @@ def restore_state(fname):
 
     If all went OK, return True, else False (ie, error reading file).
     """
-
-    global current_place
 
     with open(fname, 'r') as fd:
         restore_data = fd.read()
@@ -250,7 +270,11 @@ def restore_state(fname):
 
     map_instances_ref()
 
+    global current_place
     current_place = place_name_ref[restore_dict['current_place']]
+
+    global allowed_commands
+    globals()['allowed_commands'] = restore_dict['allowed_commands']
 
     return True
 
@@ -466,28 +490,6 @@ def map_instances_ref():
             place_ref = place_name_ref[place]
             place_ref.monsters.append(name)
     
-    # delete globals that we no longer need that reference Place, Object and Monster instances
-    # not doing this confuses the "save_state()" code
-#    del obj, place_ref
-
-# map allowed input moves to "canonical" move strings
-allowed_commands = {'north': 'north', 'n': 'north',
-                    'northeast': 'northeast', 'ne': 'northeast',
-                    'east': 'east', 'e': 'east',
-                    'southeast': 'southeast', 'se': 'southeast',
-                    'south': 'south', 's': 'south',
-                    'southwest': 'southwest', 'sw': 'southwest',
-                    'west': 'west', 'w': 'west',
-                    'northwest': 'northwest', 'nw': 'northwest',
-                    'quit': 'quit', 'q': 'quit', 'ex': 'quit', 'exit': 'quit',
-                    'stop': 'quit', 'leave': 'quit',
-                    'look': 'look', 'l': 'look',
-                    'get': 'get', 'g': 'get', 'pickup': 'get',
-                    'drop': 'drop', 'd': 'drop',
-                    'inventory': 'invent', 'inv': 'invent', 'i': 'invent',
-                    'wait': 'wait',
-                   }
-
 ######
 # Get data from the save file, else just initialize to the default
 ######
