@@ -264,8 +264,8 @@ def restore_state(fname):
         name = monster['name']
         globals()[name] = Monster(**monster)
 
-    player = restore_dict['Player']
-    globals()['player'] = Player(**player)
+    global player
+    player = Player(**restore_dict['Player'])
 
     map_instances_ref()
 
@@ -273,7 +273,7 @@ def restore_state(fname):
     current_place = place_name_ref[restore_dict['current_place']]
 
     global allowed_commands
-    globals()['allowed_commands'] = restore_dict['allowed_commands']
+    allowed_commands = restore_dict['allowed_commands']
 
     return True
 
